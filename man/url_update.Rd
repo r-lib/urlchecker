@@ -11,6 +11,15 @@ url_update(path = ".", results = url_check(path))
 
 \item{results}{results from \link{url_check}.}
 }
+\value{
+The results from \code{url_check(path)}, invisibly.
+}
 \description{
 Update URLs in a package
+}
+\examples{
+\dontrun{
+url_update("my_pkg")
+}
+
 }

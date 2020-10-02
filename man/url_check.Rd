@@ -12,3 +12,9 @@ url_check(path = ".")
 \description{
 Check urls in a package
 }
+\examples{
+\dontrun{
+url_check("my_pkg")
+}
+
+}

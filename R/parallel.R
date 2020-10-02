@@ -13,7 +13,6 @@ curl_fetch_headers <- function(urls) {
     curl::multi_add(h, done = handle_result)
   }
   curl::multi_run()
-  #return (hs[[1]])
 
   out <- vector("list", length(hs))
   for (i in seq_along(out)) {

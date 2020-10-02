@@ -2,12 +2,18 @@
 #'
 #' @param path Path to the package
 #' @export
+#' @examples
+#' \dontrun{
+#' url_check("my_pkg")
+#' }
+#'
 url_check <- function(path = ".") {
   db <- url_db_from_package_sources(path)
   res <- check_url_db(db)
   if (NROW(res) > 0) {
     res$root <- normalizePath(path)
   }
+  class(res) <- c("urlchecker_db", class(res))
   res
 }
 
@@ -37,12 +43,15 @@ url_update <- function(path = ".", results = url_check(path)) {
 
   broken <- results[!can_update, ]
 
-  for (row in seq_len(NROW(broken))) {
-    url <- broken[row, "URL"]
-    status <- broken[row, "Status"]
-    message <- broken[row, "Message"]
-    root <- broken[row, "root"] %||% path
-    for (file in broken[row, "From"]) {
+#' @export
+print.urlchecker_db <- function(x, ...) {
+  for (row in seq_len(NROW(x))) {
+    url <- x[row, "URL"]
+    new <- x[row, "New"]
+    status <- x[row, "Status"]
+    message <- x[row, "Message"]
+    root <- x[row, "root"]
+    for (file in x[row, "From"]) {
       file_path <- file.path(root, file)
       data <- readLines(file_path)
       match <- regexpr(url, data, fixed = TRUE)
@@ -51,16 +60,26 @@ url_update <- function(path = ".", results = url_check(path)) {
       ends <- starts + attr(match, "match.length")[match != -1]
       for (i in seq_along(lines)) {
         pointer <- paste0(strrep(" ", starts[[i]] - 1), "^", strrep("~", ends[[i]] - starts[[i]] - 1))
+        if (nzchar(new)) {
+          fix_it <- paste0(strrep(" ", starts[[i]] - 1), new)
+          cli::cli_alert_warning("
+            {.strong Warning:} {file}:{lines[[i]]}:{starts[[i]]} {.emph Moved}
+            {data[lines[[i]]]}
+            {pointer}
+            {fix_it}
+            ")
+        } else {
         cli::cli_alert_danger("
           {.strong Error:} {file}:{lines[[i]]}:{starts[[i]]} {.emph {status}: {message}}
           {data[lines[[i]]]}
           {pointer}
           ")
+        }
       }
     }
   }
-  invisible(results)
+
+    invisible(x)
 }
 
-`%||%` <- function(x, y) if (is.null(x)) y else x
 vlapply <- function(x, f, ...) vapply(x, f, logical(1))

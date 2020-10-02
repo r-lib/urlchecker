@@ -7,9 +7,11 @@
 #' url_check("my_pkg")
 #' }
 #'
-url_check <- function(path = ".") {
-  db <- url_db_from_package_sources(path)
-  res <- check_url_db(db)
+url_check <- function(path = ".", db = NULL, parallel = TRUE) {
+  if (is.null(db)) {
+    db <- url_db_from_package_sources(path)
+  }
+  res <- check_url_db(db, parallel = parallel)
   if (NROW(res) > 0) {
     res$root <- normalizePath(path)
   }

@@ -379,7 +379,7 @@ table_of_FTP_server_return_codes <-
       )
 
 check_url_db <-
-function(db, remote = TRUE, verbose = FALSE)
+function(db, remote = TRUE, verbose = FALSE, parallel = FALSE)
 {
     use_curl <-
         asNamespace("tools")$config_val_to_logical(Sys.getenv("_R_CHECK_URLS_USE_CURL_",
@@ -432,12 +432,11 @@ function(db, remote = TRUE, verbose = FALSE)
     }
 
     .check_http <- if(remote)
-        function(u) c(.check_http_A(u), .check_http_B(u))
+        function(u) c(.check_http_A(.fetch(u), u), .check_http_B(u))
     else
         function(u) c(rep.int("", 3L), .check_http_B(u))
 
-    .check_http_A <- function(u) {
-        h <- .fetch(u)
+    .check_http_A <- function(h, u) {
         newLoc <- ""
         if(inherits(h, "error")) {
             s <- "-1"
@@ -513,6 +512,17 @@ function(db, remote = TRUE, verbose = FALSE)
         c(if(cran) u else "", if(spaces) u else "", if(R) u else "")
     }
 
+    .check_http_parallel <- function(urls) {
+      process <- function(header, url) {
+        c(.check_http_A(header, url), .check_http_B(url))
+      }
+
+      headers <- curl_fetch_headers(urls)
+      browser()
+      do.call(rbind, mapply(process, headers, urls, SIMPLIFY = FALSE))
+    }
+
+
     bad <- .gather()
 
     if(!NROW(db)) return(bad)
@@ -585,7 +595,12 @@ function(db, remote = TRUE, verbose = FALSE)
     ## http/https.
     pos <- which(schemes == "http" | schemes == "https")
     if(length(pos)) {
+      if (parallel) {
+        results <- .check_http_parallel(urls[pos])
+        browser()
+      } else {
         results <- do.call(rbind, lapply(urls[pos], .check_http))
+      }
         status <- as.numeric(results[, 1L])
         ## 405 is HTTP not allowing HEAD requests
         ## maybe also skip 500, 503, 504 as likely to be temporary issues

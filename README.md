@@ -7,6 +7,8 @@
 
 The goal of urlchecker is to run the URL checks from R 4.1 in R 4.0 and automatically update URLs as needed
 
+<http://github.com/r-lib/devtools>
+
 ``` r
 library(urlchecker)
 url_update("path/to/pkg")

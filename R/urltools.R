@@ -51,9 +51,9 @@ function(x)
         tag <- attr(e, "Rd_tag")
         ## Rd2HTML and Rd2latex remove whitespace and \n from URLs.
         if(identical(tag, "\\url")) {
-            urls <<- c(urls, tools:::lines2str(tools:::.Rd_deparse(e, tag = FALSE)))
+            urls <<- c(urls, asNamespace("tools")$lines2str(asNamespace("tools")$.Rd_deparse(e, tag = FALSE)))
         } else if(identical(tag, "\\href")) {
-            urls <<- c(urls, tools:::lines2str(tools:::.Rd_deparse(e[[1L]], tag = FALSE)))
+            urls <<- c(urls, asNamespace("tools")$lines2str(asNamespace("tools")$.Rd_deparse(e[[1L]], tag = FALSE)))
         } else if(is.list(e))
             lapply(e, recurse)
     }
@@ -117,13 +117,13 @@ function(dir, recursive = FALSE, files = NULL, verbose = FALSE)
                function(f) {
                    if(verbose)
                        message(sprintf("processing %s",
-                                       .file_path_relative_to_dir(f, dir)))
-                   .get_urls_from_HTML_file(f)
+                                       asNamespace("tools")$.file_path_relative_to_dir(f, dir)))
+                   asNamespace("tools")$.get_urls_from_HTML_file(f)
                })
     names(urls) <- files
     urls <- Filter(length, urls)
     if(length(urls)) {
-        parents <- rep.int(.file_path_relative_to_dir(names(urls), dir),
+        parents <- rep.int(asNamespace("tools")$.file_path_relative_to_dir(names(urls), dir),
                            lengths(urls))
         urls <- unlist(urls, use.names = FALSE)
     }
@@ -139,19 +139,19 @@ function(dir, recursive = FALSE, files = NULL, verbose = FALSE)
                             full.names = TRUE,
                             recursive = recursive)
     ## FIXME: this is simpler to do with full.names = FALSE and without
-    ## tools:::.file_path_relative_to_dir().
+    ## asNamespace("tools")$.file_path_relative_to_dir().
     urls <-
         lapply(files,
                function(f) {
                    if(verbose)
                        message(sprintf("processing %s",
-                                       .file_path_relative_to_dir(f, dir)))
-                   .get_urls_from_PDF_file(f)
+                                       asNamespace("tools")$.file_path_relative_to_dir(f, dir)))
+                   asNamespace("tools")$.get_urls_from_PDF_file(f)
                })
     names(urls) <- files
     urls <- Filter(length, urls)
     if(length(urls)) {
-        parents <- rep.int(.file_path_relative_to_dir(names(urls), dir),
+        parents <- rep.int(asNamespace("tools")$.file_path_relative_to_dir(names(urls), dir),
                            lengths(urls))
         urls <- unlist(urls, use.names = FALSE)
     }
@@ -177,22 +177,22 @@ function(meta)
         pattern <-
             "<(URL: *)?((https?|ftp)://[^[:space:],]*)[[:space:]]*>"
         m <- gregexpr(pattern, v)
-        urls <- c(urls, tools:::.gregexec_at_pos(pattern, v, m, 3L))
+        urls <- c(urls, asNamespace("tools")$.gregexec_at_pos(pattern, v, m, 3L))
         regmatches(v, m) <- ""
         pattern <- "(^|[^>\"])((https?|ftp)://[^[:space:],]*)"
         m <- gregexpr(pattern, v)
-        urls <- c(urls, tools:::.gregexec_at_pos(pattern, v, m, 3L))
+        urls <- c(urls, asNamespace("tools")$.gregexec_at_pos(pattern, v, m, 3L))
     }
     if(!is.na(v <- meta["Description"])) {
         pattern <-
             "<(URL: *)?((https?|ftp)://[^[:space:]]+)[[:space:]]*>"
         m <- gregexpr(pattern, v)
-        urls <- c(urls, tools:::.gregexec_at_pos(pattern, v, m, 3L))
+        urls <- c(urls, asNamespace("tools")$.gregexec_at_pos(pattern, v, m, 3L))
         regmatches(v, m) <- ""
         pattern <-
             "([^>\"])((https?|ftp)://[[:alnum:]/.:@+\\_~%#?=&;,-]+[[:alnum:]/])"
         m <- gregexpr(pattern, v)
-        urls <- c(urls, tools:::.gregexec_at_pos(pattern, v, m, 3L))
+        urls <- c(urls, asNamespace("tools")$.gregexec_at_pos(pattern, v, m, 3L))
     }
 
     url_db(urls, rep.int("DESCRIPTION", length(urls)))
@@ -205,7 +205,7 @@ function(dir, meta, installed = FALSE)
     path <- if(installed) "CITATION" else file.path("inst", "CITATION")
     cfile <- file.path(dir, path)
     if(file.exists(cfile)) {
-        cinfo <- tools:::.read_citation_quietly(cfile, meta)
+        cinfo <- asNamespace("tools")$.read_citation_quietly(cfile, meta)
         if(!inherits(cinfo, "error"))
             urls <- trimws(unique(unlist(cinfo$url, use.names = FALSE)))
     }
@@ -219,8 +219,8 @@ function(dir, installed = FALSE)
     nfile <- file.path(dir, path)
     urls <-
         if(file.exists(nfile)) {
-            macros <- tools::initialRdMacros()
-            .get_urls_from_Rd(prepare_Rd(parse_Rd(nfile, macros = macros),
+            macros <- asNamespace("tools")$initialRdMacros()
+            asNamespace("tools")$.get_urls_from_Rd(asNamespace("tools")$prepare_Rd(tools::parse_Rd(nfile, macros = macros),
                                          stages = "install"))
         } else character()
     url_db(urls, rep.int(path, length(urls)))
@@ -245,10 +245,10 @@ function(dir, installed = FALSE)
                           file.path(dir, "inst", "README.md"),
                       file.path(dir, "README.md")))[1L]
     if(!is.na(rfile) && nzchar(Sys.which("pandoc"))) {
-        path <- tools:::.file_path_relative_to_dir(rfile, dir)
+        path <- asNamespace("tools")$.file_path_relative_to_dir(rfile, dir)
         tfile <- tempfile("README", fileext = ".html")
         on.exit(unlink(tfile))
-        out <- tools:::.pandoc_md_for_CRAN(rfile, tfile)
+        out <- asNamespace("tools")$.pandoc_md_for_CRAN(rfile, tfile)
         if(!out$status) {
             urls <- .get_urls_from_HTML_file(tfile)
         }
@@ -265,10 +265,10 @@ function(dir, installed = FALSE)
                           file.path(dir, "inst", "NEWS.md"),
                       file.path(dir, "NEWS.md")))[1L]
     if(!is.na(nfile) && nzchar(Sys.which("pandoc"))) {
-        path <- tools:::.file_path_relative_to_dir(nfile, dir)
+        path <- asNamespace("tools")$.file_path_relative_to_dir(nfile, dir)
         tfile <- tempfile("NEWS", fileext = ".html")
         on.exit(unlink(tfile))
-        out <- tools:::.pandoc_md_for_CRAN(nfile, tfile)
+        out <- asNamespace("tools")$.pandoc_md_for_CRAN(nfile, tfile)
         if(!out$status) {
             urls <- .get_urls_from_HTML_file(tfile)
         }
@@ -278,7 +278,7 @@ function(dir, installed = FALSE)
 
 url_db_from_package_sources <-
 function(dir, add = FALSE) {
-    meta <- tools:::.read_description(file.path(dir, "DESCRIPTION"))
+    meta <- asNamespace("tools")$.read_description(file.path(dir, "DESCRIPTION"))
     db <- rbind(url_db_from_package_metadata(meta),
                 url_db_from_package_Rd_db(tools::Rd_db(dir = dir)),
                 url_db_from_package_citation(dir, meta),
@@ -304,7 +304,7 @@ function(packages, lib.loc = NULL, verbose = FALSE)
             message(sprintf("processing %s", p))
         dir <- system.file(package = p, lib.loc = lib.loc)
         if(dir == "") return()
-        meta <- tools:::.read_description(file.path(dir, "DESCRIPTION"))
+        meta <- asNamespace("tools")$.read_description(file.path(dir, "DESCRIPTION"))
         rddb <- tools::Rd_db(p, lib.loc = dirname(dir))
         db <- rbind(url_db_from_package_metadata(meta),
                     url_db_from_package_Rd_db(rddb),
@@ -382,7 +382,7 @@ check_url_db <-
 function(db, remote = TRUE, verbose = FALSE)
 {
     use_curl <-
-        tools:::config_val_to_logical(Sys.getenv("_R_CHECK_URLS_USE_CURL_",
+        asNamespace("tools")$config_val_to_logical(Sys.getenv("_R_CHECK_URLS_USE_CURL_",
                                          "TRUE")) &&
         requireNamespace("curl", quietly = TRUE)
 
@@ -445,11 +445,11 @@ function(db, remote = TRUE, verbose = FALSE)
             if (!is.null(v <- attr(h, "no-verify"))) {
                 s2 <- as.character(attr(v, "status"))
                 msg <- paste0(msg, "\n\t(Status without verification: ",
-                              table_of_HTTP_status_codes[s2], ")")
+                              asNamespace("tools")$table_of_HTTP_status_codes[s2], ")")
             }
         } else {
             s <- as.character(attr(h, "status"))
-            msg <- tools:::table_of_HTTP_status_codes[s]
+            msg <- asNamespace("tools")$table_of_HTTP_status_codes[s]
         }
         ## Look for redirected URLs
         ## According to
@@ -550,7 +550,7 @@ function(db, remote = TRUE, verbose = FALSE)
     schemes <- parts[, 1L]
     ind <- is.na(match(schemes,
                        c("",
-                         tools:::IANA_URI_scheme_db$URI_Scheme,
+                         asNamespace("tools")$IANA_URI_scheme_db$URI_Scheme,
                          ## Also allow 'javascript' scheme, see
                          ## <https://tools.ietf.org/html/draft-hoehrmann-javascript-scheme-03>
                          ## (but apparently never registered with IANA).

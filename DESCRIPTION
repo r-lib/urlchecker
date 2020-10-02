@@ -1,5 +1,5 @@
 Package: urlchecker
-Title: Run CRAN URL checks from R 4.0
+Title: Run CRAN URL Checks from R 4.0
 Version: 0.0.0.9000
 Authors@R: 
     c(
@@ -13,8 +13,12 @@ Authors@R:
              comment = c(ORCID = "0000-0002-2739-7082")),
       person(given = "RStudio",
              role = c("cph", "fnd")))
-Description: What the package does (one paragraph).
-License: MIT + file LICENSE
+Description: Provide the URL checking tools available in R 4.1 as a package for R 4.0.
+Imports:
+  curl,
+  tools,
+  xml2
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

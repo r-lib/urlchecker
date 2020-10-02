@@ -1,5 +1,5 @@
 Package: urlchecker
-Title: What the Package Does (One Line, Title Case)
+Title: Run CRAN URL checks from R 4.0
 Version: 0.0.0.9000
 Authors@R: 
     c(

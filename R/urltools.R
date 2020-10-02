@@ -518,7 +518,6 @@ function(db, remote = TRUE, verbose = FALSE, parallel = FALSE)
       }
 
       headers <- curl_fetch_headers(urls)
-      browser()
       do.call(rbind, mapply(process, headers, urls, SIMPLIFY = FALSE))
     }
 
@@ -597,7 +596,6 @@ function(db, remote = TRUE, verbose = FALSE, parallel = FALSE)
     if(length(pos)) {
       if (parallel) {
         results <- .check_http_parallel(urls[pos])
-        browser()
       } else {
         results <- do.call(rbind, lapply(urls[pos], .check_http))
       }

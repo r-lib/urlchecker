@@ -1,6 +1,8 @@
 #' Check urls in a package
 #'
 #' @param path Path to the package
+#' @param db A url database
+#' @param parallel If `TRUE`, check the URLs in parallel
 #' @export
 #' @examples
 #' \dontrun{

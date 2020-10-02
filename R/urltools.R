@@ -51,9 +51,9 @@ function(x)
         tag <- attr(e, "Rd_tag")
         ## Rd2HTML and Rd2latex remove whitespace and \n from URLs.
         if(identical(tag, "\\url")) {
-            urls <<- c(urls, asNamespace("tools")$lines2str(asNamespace("tools")$.Rd_deparse(e, tag = FALSE)))
+            urls <<- c(urls, lines2str(asNamespace("tools")$.Rd_deparse(e, tag = FALSE)))
         } else if(identical(tag, "\\href")) {
-            urls <<- c(urls, asNamespace("tools")$lines2str(asNamespace("tools")$.Rd_deparse(e[[1L]], tag = FALSE)))
+            urls <<- c(urls, lines2str(asNamespace("tools")$.Rd_deparse(e[[1L]], tag = FALSE)))
         } else if(is.list(e))
             lapply(e, recurse)
     }

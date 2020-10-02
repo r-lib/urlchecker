@@ -4,10 +4,14 @@
 \alias{url_check}
 \title{Check urls in a package}
 \usage{
-url_check(path = ".")
+url_check(path = ".", db = NULL, parallel = TRUE)
 }
 \arguments{
 \item{path}{Path to the package}
+
+\item{db}{A url database}
+
+\item{parallel}{If \code{TRUE}, check the URLs in parallel}
 }
 \description{
 Check urls in a package

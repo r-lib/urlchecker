@@ -38,11 +38,12 @@ url_update <- function(path = ".", results = url_check(path)) {
   can_update <- vlapply(results[["New"]], nzchar)
   to_update <- results[can_update, ]
   for (row in seq_len(NROW(to_update))) {
-    old <- to_update[row, "URL"]
-    new <- to_update[row, "New"]
-    root <- to_update[row, "root"]
+    old <- to_update[["URL"]][[row]]
+    new <- to_update[["New"]][[row]]
+    root <- to_update[["root"]][[row]]
     if (nzchar(new)) {
-      for (file in to_update[row, "From"]) {
+      from <- to_update[["from"]][[row]]
+      for (file in from) {
         file_path <- file.path(root, file)
         data <- readLines(file_path)
         data <- gsub(old, new, data, fixed = TRUE)

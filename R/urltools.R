@@ -518,7 +518,15 @@ function(db, remote = TRUE, verbose = FALSE, parallel = FALSE, pool = curl::new_
       }
 
       headers <- curl_fetch_headers(urls, pool = pool, progress = progress)
-      do.call(rbind, mapply(process, headers, urls, SIMPLIFY = FALSE))
+      res <- vector("list", length(headers))
+
+      bar <- progress_bar(if (progress) length(res), msg = "processing ")
+
+      for (i in seq_along(res)) {
+        res[[i]] <- process(headers[[i]], urls[[i]])
+        bar$update()
+      }
+      do.call(rbind, res)
     }
 
 

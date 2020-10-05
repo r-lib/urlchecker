@@ -42,7 +42,7 @@ url_update <- function(path = ".", results = url_check(path)) {
     new <- to_update[["New"]][[row]]
     root <- to_update[["root"]][[row]]
     if (nzchar(new)) {
-      from <- to_update[["from"]][[row]]
+      from <- to_update[["From"]][[row]]
       for (file in from) {
         file_path <- file.path(root, file)
         data <- readLines(file_path)

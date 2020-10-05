@@ -44,6 +44,8 @@ curl_fetch_headers <- function(urls, pool = curl::new_pool(), progress = FALSE) 
   out
 }
 
+utils::globalVariables(c("done", "fmt"))
+
 progress_bar <- function(length, msg = "") {
   bar <- new.env(parent = baseenv())
   if (is.null(length)) {
@@ -54,7 +56,7 @@ progress_bar <- function(length, msg = "") {
   digits <- trunc(log10(length)) + 1L
   bar$fmt <- paste0("\r", msg, "[ %", digits, "i / %", digits, "i ]")
   bar$update <- function() {
-    done <<- done + 1L
+    assign("done", inherits = TRUE, done + 1L)
     if (length <= 0L) {
       return()
     }

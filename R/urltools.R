@@ -379,7 +379,7 @@ table_of_FTP_server_return_codes <-
       )
 
 check_url_db <-
-function(db, remote = TRUE, verbose = FALSE, parallel = FALSE)
+function(db, remote = TRUE, verbose = FALSE, parallel = FALSE, pool = curl::new_pool())
 {
     use_curl <-
         asNamespace("tools")$config_val_to_logical(Sys.getenv("_R_CHECK_URLS_USE_CURL_",
@@ -512,12 +512,12 @@ function(db, remote = TRUE, verbose = FALSE, parallel = FALSE)
         c(if(cran) u else "", if(spaces) u else "", if(R) u else "")
     }
 
-    .check_http_parallel <- function(urls) {
+    .check_http_parallel <- function(urls, pool) {
       process <- function(header, url) {
         c(.check_http_A(header, url), .check_http_B(url))
       }
 
-      headers <- curl_fetch_headers(urls)
+      headers <- curl_fetch_headers(urls, pool = pool)
       do.call(rbind, mapply(process, headers, urls, SIMPLIFY = FALSE))
     }
 
@@ -595,7 +595,7 @@ function(db, remote = TRUE, verbose = FALSE, parallel = FALSE)
     pos <- which(schemes == "http" | schemes == "https")
     if(length(pos)) {
       if (parallel) {
-        results <- .check_http_parallel(urls[pos])
+        results <- .check_http_parallel(urls[pos], pool)
       } else {
         results <- do.call(rbind, lapply(urls[pos], .check_http))
       }

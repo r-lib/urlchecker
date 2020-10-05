@@ -3,17 +3,18 @@
 #' @param path Path to the package
 #' @param db A url database
 #' @param parallel If `TRUE`, check the URLs in parallel
+#' @param pool A multi handle created by [curl::new_pool()]. If `NULL` use a global pool.
 #' @export
 #' @examples
 #' \dontrun{
 #' url_check("my_pkg")
 #' }
 #'
-url_check <- function(path = ".", db = NULL, parallel = TRUE) {
+url_check <- function(path = ".", db = NULL, parallel = TRUE, pool = curl::new_pool()) {
   if (is.null(db)) {
     db <- url_db_from_package_sources(path)
   }
-  res <- check_url_db(db, parallel = parallel)
+  res <- check_url_db(db, parallel = parallel, pool = pool)
   if (NROW(res) > 0) {
     res$root <- normalizePath(path)
   }

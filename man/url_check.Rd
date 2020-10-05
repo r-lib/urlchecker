@@ -4,7 +4,7 @@
 \alias{url_check}
 \title{Check urls in a package}
 \usage{
-url_check(path = ".", db = NULL, parallel = TRUE)
+url_check(path = ".", db = NULL, parallel = TRUE, pool = curl::new_pool())
 }
 \arguments{
 \item{path}{Path to the package}
@@ -12,6 +12,8 @@ url_check(path = ".", db = NULL, parallel = TRUE)
 \item{db}{A url database}
 
 \item{parallel}{If \code{TRUE}, check the URLs in parallel}
+
+\item{pool}{A multi handle created by \code{\link[curl:multi]{curl::new_pool()}}. If \code{NULL} use a global pool.}
 }
 \description{
 Check urls in a package

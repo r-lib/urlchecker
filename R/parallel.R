@@ -25,7 +25,6 @@ curl_fetch_headers <- function(urls, pool = curl::new_pool(), progress = FALSE) 
       i <- i
       function(x) {
         hs[[i]] <<- structure(list(message = x), class = c("curl_error", "error", "condition"))
-        done <<- done + 1L
         bar$update()
       }
     })

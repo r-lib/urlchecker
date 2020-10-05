@@ -64,7 +64,7 @@ print.urlchecker_db <- function(x, ...) {
     status <- x[row, "Status"]
     message <- x[row, "Message"]
     root <- x[row, "root"]
-    for (file in x[row, "From"]) {
+    for (file in x[["From"]][[row]]) {
       file_path <- file.path(root, file)
       data <- readLines(file_path)
       match <- regexpr(url, data, fixed = TRUE)

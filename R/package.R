@@ -4,17 +4,18 @@
 #' @param db A url database
 #' @param parallel If `TRUE`, check the URLs in parallel
 #' @param pool A multi handle created by [curl::new_pool()]. If `NULL` use a global pool.
+#' @param progress Whether to show the progress bar for parallel checks
 #' @export
 #' @examples
 #' \dontrun{
 #' url_check("my_pkg")
 #' }
 #'
-url_check <- function(path = ".", db = NULL, parallel = TRUE, pool = curl::new_pool()) {
+url_check <- function(path = ".", db = NULL, parallel = TRUE, pool = curl::new_pool(), progress = TRUE) {
   if (is.null(db)) {
     db <- url_db_from_package_sources(path)
   }
-  res <- check_url_db(db, parallel = parallel, pool = pool)
+  res <- check_url_db(db, parallel = parallel, pool = pool, progress = TRUE)
   if (NROW(res) > 0) {
     res$root <- normalizePath(path)
   }
@@ -59,12 +60,22 @@ url_update <- function(path = ".", results = url_check(path)) {
 #' @export
 print.urlchecker_db <- function(x, ...) {
   for (row in seq_len(NROW(x))) {
-    url <- x[row, "URL"]
-    new <- x[row, "New"]
-    status <- x[row, "Status"]
-    message <- x[row, "Message"]
-    root <- x[row, "root"]
-    for (file in x[["From"]][[row]]) {
+    cran <- x[["CRAN"]][[row]]
+    if (nzchar(cran)) {
+      status <- "Error"
+      message <- "CRAN URL not in canonical form"
+      url <- cran
+      new <- ""
+    } else {
+      status <- x[["Status"]][[row]]
+      message <- x[["Message"]][[row]]
+      url <- x[["URL"]][[row]]
+      new <- x[["New"]][[row]]
+    }
+    root <- x[["root"]][[row]]
+    from <- x[["From"]][[row]]
+
+    for (file in from) {
       file_path <- file.path(root, file)
       data <- readLines(file_path)
       match <- regexpr(url, data, fixed = TRUE)

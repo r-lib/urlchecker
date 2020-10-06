@@ -5,7 +5,9 @@
 [![R build status](https://github.com/jimhester/urlchecker/workflows/R-CMD-check/badge.svg)](https://github.com/jimhester/urlchecker/actions)
 <!-- badges: end -->
 
-The goal of urlchecker is to run the URL checks from R 4.1 in older versions of R and automatically update URLs as needed
+The goal of urlchecker is to run the URL checks from R 4.1 in older versions of R and automatically update URLs as needed.
+
+It also uses concurrent requests, so is generally much faster than the URL checks from the tools package.
 
 ``` r
 library(urlchecker)

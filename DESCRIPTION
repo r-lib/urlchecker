@@ -13,7 +13,9 @@ Authors@R:
              comment = c(ORCID = "0000-0002-2739-7082")),
       person(given = "RStudio",
              role = c("cph", "fnd")))
-Description: Provide the URL checking tools available in R 4.1 as a package for earlier versions of R.
+Description: Provide the URL checking tools available in R 4.1 as a package for
+  earlier versions of R. Also uses concurrent requests so can be much faster than
+  the serial code used in the tools package.
 Depends:
   R (>= 3.3)
 Imports:

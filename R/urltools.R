@@ -513,9 +513,6 @@ function(db, remote = TRUE, verbose = FALSE, parallel = FALSE, pool = curl::new_
     }
 
     .check_http_parallel <- function(urls, pool, progress) {
-      process <- function(header, url) {
-        c(.check_http_A(header, url), .check_http_B(url))
-      }
 
       headers <- curl_fetch_headers(urls, pool = pool, progress = progress)
       res <- vector("list", length(headers))
@@ -523,7 +520,7 @@ function(db, remote = TRUE, verbose = FALSE, parallel = FALSE, pool = curl::new_
       bar <- progress_bar(if (progress) length(res), msg = "processing ")
 
       for (i in seq_along(res)) {
-        res[[i]] <- process(headers[[i]], urls[[i]])
+        res[[i]] <- c(.check_http_A(headers[[i]], urls[[i]]), .check_http_B(urls[[i]]))
         bar$update()
       }
       do.call(rbind, res)

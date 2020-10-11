@@ -49,6 +49,15 @@ url_update <- function(path = ".", results = url_check(path)) {
         data <- gsub(old, new, data, fixed = TRUE)
         writeLines(data, file_path)
         cli::cli_alert_success("{.strong Updated:} {.url {old}} to {.url {new}} in {.file {file}}")
+        if (file == "README.md") {
+          file_path <- file.path(root, "README.Rmd")
+          if (file.exists(file_path)) {
+            data <- readLines(file_path)
+            data <- gsub(old, new, data, fixed = TRUE)
+            writeLines(data, file_path)
+            cli::cli_alert_success("{.strong Updated:} {.url {old}} to {.url {new}} in {.file README.Rmd}")
+          }
+        }
       }
     }
   }

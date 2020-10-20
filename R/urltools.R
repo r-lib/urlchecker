@@ -287,7 +287,8 @@ function(dir, add = FALSE) {
         db <- rbind(db,
                     url_db_from_package_HTML_files(dir),
                     url_db_from_package_README_md(dir),
-                    url_db_from_package_NEWS_md(dir)
+                    url_db_from_package_NEWS_md(dir),
+                    url_db_from_package_rmd_vignettes(dir)
                     )
     }
     if(add)

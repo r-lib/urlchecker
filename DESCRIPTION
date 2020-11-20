@@ -19,10 +19,11 @@ Description: Provide the URL checking tools available in R 4.1 as a package for
 Depends:
   R (>= 3.3)
 Imports:
-  cli,
-  curl,
-  tools,
-  xml2
+    commonmark,
+    cli,
+    curl,
+    tools,
+    xml2
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

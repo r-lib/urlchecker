@@ -1,3 +1,5 @@
 ^LICENSE\.md$
 ^script\.R$
 ^\.github$
+^.*\.Rproj$
+^\.Rproj\.user$

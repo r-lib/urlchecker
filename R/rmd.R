@@ -8,7 +8,7 @@ function(dir)
         rpath <- asNamespace("tools")$.file_path_relative_to_dir(rfile, dir)
         tfile <- tempfile(fileext = ".html")
         on.exit(unlink(tfile), add = TRUE)
-        out <- asNamespace("tools")$.pandoc_md_for_CRAN(rfile, tfile)
+        out <- .pandoc_md_for_CRAN2(rfile, tfile)
         if(!out$status) {
           rurls <- .get_urls_from_HTML_file(tfile)
           urls <- c(urls, rurls)
@@ -17,4 +17,11 @@ function(dir)
       }
     }
     url_db(urls, path)
+}
+
+
+.pandoc_md_for_CRAN2 <- function(ifile, ofile) {
+    asNamespace("tools")$.system_with_capture("pandoc", paste(shQuote(normalizePath(ifile)),
+        "-s", "--mathjax", "--email-obfuscation=references", "-f", "markdown+autolink_bare_uris",
+        "-o", shQuote(ofile)))
 }

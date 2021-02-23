@@ -9,7 +9,7 @@ with_pandoc_available <- function(code) {
     } else {
       sys_path <- Sys.getenv("PATH")
       on.exit(Sys.setenv("PATH" = sys_path))
-      Sys.setenv("PATH" = paste(pandoc_path, sys_path, sep = ";"))
+      Sys.setenv("PATH" = paste(pandoc_path, sys_path, sep = .Platform$path.sep))
     }
   }
   force(code)

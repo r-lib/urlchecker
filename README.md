@@ -1,4 +1,3 @@
-
 # urlchecker
 
 <!-- badges: start -->
@@ -12,9 +11,11 @@ It also uses concurrent requests, so is generally much faster than the URL check
 ``` r
 library(urlchecker)
 
-# Check all URLs in a package
+# `url_check()` will check all URLs in a package, as is done by CRAN when
+# submitting a package.
 url_check("path/to/pkg")
 
-## Update any redirected URLs automatically
+# `url_update()` will check all URLs in a package, then update any 301
+# redirects automatically to their new location.
 url_update("path/to/pkg")
 ```

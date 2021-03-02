@@ -1,16 +1,20 @@
 #' Check urls in a package
 #'
+#' Runs the `url_db_from_package_source` function in the tools package along
+#' with a function to check URLs in un-rendered Rmarkdown vignettes.
+#'
 #' @param path Path to the package
 #' @param db A url database
 #' @param parallel If `TRUE`, check the URLs in parallel
 #' @param pool A multi handle created by [curl::new_pool()]. If `NULL` use a global pool.
 #' @param progress Whether to show the progress bar for parallel checks
-#' @export
+#' @return A `url_checker_db` object (invisibly). This is a `check_url_db` object
+#'   with an added class with a custom print method.
 #' @examples
 #' \dontrun{
 #' url_check("my_pkg")
 #' }
-#'
+#' @export
 url_check <- function(path = ".", db = NULL, parallel = TRUE, pool = curl::new_pool(), progress = TRUE) {
   if (is.null(db)) {
     db <- with_pandoc_available(

@@ -1,14 +1,16 @@
 #' Update URLs in a package
 #'
+#' First uses [url_check] to check and then updates any URLs which are permanent (301)
+#' redirects.
+#'
 #' @param path Path to the package
 #' @param results results from [url_check].
 #' @return The results from `url_check(path)`, invisibly.
-#' @export
 #' @examples
 #' \dontrun{
 #' url_update("my_pkg")
 #' }
-#'
+#' @export
 url_update <- function(path = ".", results = url_check(path)) {
   can_update <- vlapply(results[["New"]], nzchar)
   to_update <- results[can_update, ]

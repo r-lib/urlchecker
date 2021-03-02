@@ -13,8 +13,14 @@
 #'
 url_check <- function(path = ".", db = NULL, parallel = TRUE, pool = curl::new_pool(), progress = TRUE) {
   if (is.null(db)) {
-    db <- with_pandoc_available(tools$url_db_from_package_sources(normalizePath(path)))
+    db <- with_pandoc_available(
+      rbind(
+        tools$url_db_from_package_sources(normalizePath(path)),
+        url_db_from_package_rmd_vignettes(normalizePath(path))
+      )
+    )
   }
+
   res <- tools$check_url_db(db, parallel = parallel, pool = pool, verbose = progress)
   if (NROW(res) > 0) {
     res$root <- normalizePath(path)

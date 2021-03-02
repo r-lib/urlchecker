@@ -13,9 +13,9 @@
 #'
 url_check <- function(path = ".", db = NULL, parallel = TRUE, pool = curl::new_pool(), progress = TRUE) {
   if (is.null(db)) {
-    db <- url_db_from_package_sources(normalizePath(path))
+    db <- tools$url_db_from_package_sources(normalizePath(path))
   }
-  res <- check_url_db(db, parallel = parallel, pool = pool, verbose = progress)
+  res <- tools$check_url_db(db, parallel = parallel, pool = pool, verbose = progress)
   if (NROW(res) > 0) {
     res$root <- normalizePath(path)
   }

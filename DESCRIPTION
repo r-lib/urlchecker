@@ -1,5 +1,5 @@
 Package: urlchecker
-Title: Run CRAN URL Checks from R
+Title: Run CRAN URL Checks from Older R Versions
 Version: 0.0.0.9000
 Authors@R: 
     c(
@@ -13,9 +13,9 @@ Authors@R:
              comment = c(ORCID = "0000-0002-2739-7082")),
       person(given = "RStudio",
              role = c("cph", "fnd")))
-Description: Provide the URL checking tools available in R 4.1 as a package for
+Description: Provide the URL checking tools available in R 4.1+ as a package for
   earlier versions of R. Also uses concurrent requests so can be much faster than
-  the serial code used in the tools package.
+  the serial versions.
 Depends:
   R (>= 3.3)
 Imports:

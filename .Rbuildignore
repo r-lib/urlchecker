@@ -1,3 +1,4 @@
 ^LICENSE\.md$
 ^script\.R$
 ^\.github$
+^cran-comments\.md$

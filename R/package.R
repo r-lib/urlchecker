@@ -63,6 +63,11 @@ url_update <- function(path = ".", results = url_check(path)) {
 
 #' @export
 print.urlchecker_db <- function(x, ...) {
+  if (NROW(x) == 0) {
+    cli::cli_alert_success("All URLs are correct!")
+    return(invisible(x))
+  }
+
   for (row in seq_len(NROW(x))) {
     cran <- x[["CRAN"]][[row]]
     if (nzchar(cran)) {
@@ -107,7 +112,7 @@ print.urlchecker_db <- function(x, ...) {
     }
   }
 
-    invisible(x)
+  invisible(x)
 }
 
 vlapply <- function(x, f, ...) vapply(x, f, logical(1))

@@ -2,3 +2,4 @@
 ^script\.R$
 ^\.github$
 ^cran-comments\.md$
+^codecov\.yml$

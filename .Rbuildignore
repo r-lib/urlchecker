@@ -3,3 +3,4 @@
 ^\.github$
 ^cran-comments\.md$
 ^codecov\.yml$
+^MAINTENANCE\.md$

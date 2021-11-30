@@ -1,6 +1,6 @@
 Package: urlchecker
 Title: Run CRAN URL Checks from Older R Versions
-Version: 1.0.1
+Version: 1.0.1.9000
 Authors@R: c(
     person("R Core team", role = "aut",
            comment = "The code in urltools.R adapted from the tools package"),

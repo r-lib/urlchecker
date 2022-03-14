@@ -17,7 +17,7 @@ URL: https://github.com/r-lib/urlchecker,
     https://r-lib.github.io/urlchecker/
 BugReports: https://github.com/r-lib/urlchecker/issues
 Depends:
-    R (>= 3.3)
+    R (>= 3.4)
 Imports:
     cli,
     curl,

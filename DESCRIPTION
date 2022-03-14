@@ -25,7 +25,7 @@ Imports:
     xml2
 Suggests: 
     covr
+Config/Needs/website: tidyverse/tidytemplate
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
-Config/Needs/website: tidyverse/tidytemplate

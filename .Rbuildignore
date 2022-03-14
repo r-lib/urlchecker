@@ -5,3 +5,6 @@
 ^codecov\.yml$
 ^MAINTENANCE\.md$
 ^CRAN-RELEASE$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

@@ -10,7 +10,8 @@ curl_fetch_headers <- function(urls, pool = curl::new_pool(), progress = FALSE) 
       cookiesession = 1L,
       followlocation = 1L,
       http_version = 2L,
-      ssl_enable_alpn = 0L)
+      ssl_enable_alpn = 0L
+    )
     if (grepl("^https?://github[.]com", u) && nzchar(a <- Sys.getenv("GITHUB_PAT", ""))) {
       curl::handle_setheaders(h, "Authorization" = paste("token", a))
     }

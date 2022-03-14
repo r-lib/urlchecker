@@ -74,7 +74,7 @@ print.urlchecker_db <- function(x, ...) {
             {fix_it}
             ")
         } else {
-        cli::cli_alert_danger("
+          cli::cli_alert_danger("
           {.strong Error:} {file}:{lines[[i]]}:{starts[[i]]} {.emph {status}: {message}}
           {data[lines[[i]]]}
           {pointer}
@@ -86,4 +86,3 @@ print.urlchecker_db <- function(x, ...) {
 
   invisible(x)
 }
-

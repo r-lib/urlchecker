@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://r-lib.github.io/urlchecker/404.html</loc>
+  </url>
+  <url>
+    <loc>https://r-lib.github.io/urlchecker/CODE_OF_CONDUCT.html</loc>
+  </url>
+  <url>
+    <loc>https://r-lib.github.io/urlchecker/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://r-lib.github.io/urlchecker/MAINTENANCE.html</loc>
+  </url>
+  <url>
+    <loc>https://r-lib.github.io/urlchecker/authors.html</loc>
+  </url>
+  <url>
+    <loc>https://r-lib.github.io/urlchecker/index.html</loc>
+  </url>
+  <url>
+    <loc>https://r-lib.github.io/urlchecker/news/index.html</loc>
+  </url>
+  <url>
+    <loc>https://r-lib.github.io/urlchecker/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://r-lib.github.io/urlchecker/reference/url_check.html</loc>
+  </url>
+  <url>
+    <loc>https://r-lib.github.io/urlchecker/reference/url_update.html</loc>
+  </url>
+</urlset>

@@ -1,5 +1,7 @@
 # urlchecker (development version)
 
+* Handle URL fragments in redirects (#9).
+
 # urlchecker 1.0.1
 
 * Gábor Csárdi is now the maintainer.

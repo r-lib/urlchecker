@@ -20,3 +20,9 @@ url_check("path/to/pkg")
 # redirects automatically to their new location.
 url_update("path/to/pkg")
 ```
+
+## Code of Conduct
+
+Please note that the urlchecker project is released with a 
+[Contributor Code of Conduct](https://r-lib.github.io/urlchecker/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.

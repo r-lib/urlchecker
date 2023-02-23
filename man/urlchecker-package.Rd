@@ -12,7 +12,7 @@ Provide the URL checking tools available in R 4.1+ as a package for earlier vers
 Useful links:
 \itemize{
   \item \url{https://github.com/r-lib/urlchecker}
-  \item \url{https://r-lib.github.io/urlchecker/}
+  \item \url{https://urlchecker.r-lib.org/}
   \item Report bugs at \url{https://github.com/r-lib/urlchecker/issues}
 }
 

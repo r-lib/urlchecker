@@ -1,4 +1,4 @@
-url: https://r-lib.github.io/urlchecker/
+url: https://urlchecker.r-lib.org/
 
 template:
   package: tidytemplate
@@ -6,7 +6,7 @@ template:
 
   includes:
     in_header: |
-      <script defer data-domain="r-lib.github.io/urlchecker,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
+      <script defer data-domain="urlchecker.r-lib.org,all.tidyverse.org" src="https://plausible.io/js/plausible.js"></script>
 
 development:
   mode: auto

@@ -13,6 +13,23 @@ The goal of urlchecker is to run the URL checks from R 4.1 in older versions of 
 
 It also uses concurrent requests, so is generally much faster than the URL checks from the tools package.
 
+## Installation
+
+Install the released version from CRAN
+
+```r
+install.packages("urlchecker")
+```
+
+Or the development version from GitHub:
+
+```r
+# install.packages("pak")
+pak::pak("r-lib/urlchecker")
+```
+
+## Usage
+
 ``` r
 library(urlchecker)
 

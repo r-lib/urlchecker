@@ -16,3 +16,9 @@ with_pandoc_available <- function(code) {
   }
   force(code)
 }
+
+
+update_urltools <- function() {
+  lines <- readLines("https://raw.githubusercontent.com/wch/r-source/trunk/src/library/tools/R/urltools.R")
+  writeLines(lines, "inst/tools/urltools.R")
+}

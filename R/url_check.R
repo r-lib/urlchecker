@@ -16,6 +16,10 @@
 #' }
 #' @export
 url_check <- function(path = ".", db = NULL, parallel = TRUE, pool = curl::new_pool(), progress = TRUE) {
+
+  opts <- options(timeout = 5)
+  on.exit(options(opts))
+
   if (is.null(db)) {
     db <- with_pandoc_available(
       rbind(

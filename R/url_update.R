@@ -28,7 +28,9 @@ url_update <- function(path = ".", results = url_check(path)) {
         data <- readLines(file_path)
         data <- gsub(old, new, data, fixed = TRUE)
         writeLines(data, file_path)
-        cli::cli_alert_success("{.strong Updated:} {.url {old}} to {.url {new}} in {.file {file}}")
+        cli::cli_alert_success(
+          "{.strong Updated:} {.url {old}} to {.url {new}} in {.file {file}}"
+        )
       }
     }
   }

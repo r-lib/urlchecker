@@ -15,8 +15,13 @@
 #' url_check("my_pkg")
 #' }
 #' @export
-url_check <- function(path = ".", db = NULL, parallel = TRUE, pool = curl::new_pool(), progress = TRUE) {
-
+url_check <- function(
+  path = ".",
+  db = NULL,
+  parallel = TRUE,
+  pool = curl::new_pool(),
+  progress = TRUE
+) {
   opts <- options(timeout = 5)
   on.exit(options(opts))
 
@@ -29,7 +34,12 @@ url_check <- function(path = ".", db = NULL, parallel = TRUE, pool = curl::new_p
     )
   }
 
-  res <- tools$check_url_db(db, parallel = parallel, pool = pool, verbose = progress)
+  res <- tools$check_url_db(
+    db,
+    parallel = parallel,
+    pool = pool,
+    verbose = progress
+  )
   if (NROW(res) > 0) {
     res$root <- normalizePath(path)
   }
@@ -68,21 +78,29 @@ print.urlchecker_db <- function(x, ...) {
       starts <- match[match != -1]
       ends <- starts + attr(match, "match.length")[match != -1]
       for (i in seq_along(lines)) {
-        pointer <- paste0(strrep(" ", starts[[i]] - 1), "^", strrep("~", ends[[i]] - starts[[i]] - 1))
+        pointer <- paste0(
+          strrep(" ", starts[[i]] - 1),
+          "^",
+          strrep("~", ends[[i]] - starts[[i]] - 1)
+        )
         if (nzchar(new)) {
           fix_it <- paste0(strrep(" ", starts[[i]] - 1), new)
-          cli::cli_alert_warning("
+          cli::cli_alert_warning(
+            "
             {.strong Warning:} {file}:{lines[[i]]}:{starts[[i]]} {.emph Moved}
             {data[lines[[i]]]}
             {pointer}
             {fix_it}
-            ")
+            "
+          )
         } else {
-          cli::cli_alert_danger("
+          cli::cli_alert_danger(
+            "
           {.strong Error:} {file}:{lines[[i]]}:{starts[[i]]} {.emph {status}: {message}}
           {data[lines[[i]]]}
           {pointer}
-          ")
+          "
+          )
         }
       }
     }

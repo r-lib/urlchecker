@@ -11,7 +11,9 @@ with_pandoc_available <- function(code) {
     } else {
       sys_path <- Sys.getenv("PATH")
       on.exit(Sys.setenv("PATH" = sys_path))
-      Sys.setenv("PATH" = paste(pandoc_path, sys_path, sep = .Platform$path.sep))
+      Sys.setenv(
+        "PATH" = paste(pandoc_path, sys_path, sep = .Platform$path.sep)
+      )
     }
   }
   force(code)
@@ -19,6 +21,8 @@ with_pandoc_available <- function(code) {
 
 
 update_urltools <- function() {
-  lines <- readLines("https://raw.githubusercontent.com/wch/r-source/trunk/src/library/tools/R/urltools.R")
+  lines <- readLines(
+    "https://raw.githubusercontent.com/wch/r-source/trunk/src/library/tools/R/urltools.R"
+  )
   writeLines(lines, "inst/tools/urltools.R")
 }

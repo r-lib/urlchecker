@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/r-lib/urlchecker/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/urlchecker/actions/workflows/R-CMD-check.yaml)
-[![Codecov test coverage](https://codecov.io/gh/r-lib/urlchecker/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/urlchecker?branch=main)
+[![Codecov test coverage](https://codecov.io/gh/r-lib/urlchecker/graph/badge.svg)](https://app.codecov.io/gh/r-lib/urlchecker)
 <!-- badges: end -->
 
 The goal of urlchecker is to run the URL checks from R 4.1 in older versions of R and automatically update URLs as needed.

@@ -1,6 +1,10 @@
 url_db_from_package_rmd_vignettes <- function(dir) {
-  urls <- path <- character()
   rfiles <- Filter(file.exists, tools::pkgVignettes(dir = dir)$docs)
+  url_db_from_md_files(dir, rfiles)
+}
+
+url_db_from_md_files = function(dir, rfiles) {
+  urls <- path <- character()
   for (rfile in rfiles) {
     if (!is.na(rfile) && nzchar(Sys.which("pandoc"))) {
       rpath <- asNamespace("tools")$.file_path_relative_to_dir(rfile, dir)

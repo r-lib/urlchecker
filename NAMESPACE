@@ -2,4 +2,5 @@
 
 S3method(print,urlchecker_db)
 export(url_check)
+export(url_md_check)
 export(url_update)

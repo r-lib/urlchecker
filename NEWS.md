@@ -1,6 +1,7 @@
 # urlchecker (development version)
 
 * Handle URL fragments in redirects (#9).
+* feat: Check urls outside packages - `url_md_check()`
 
 # urlchecker 1.0.1
 

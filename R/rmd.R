@@ -5,7 +5,11 @@ url_db_from_package_rmd_vignettes <- function(dir) {
   # in `url_db_from_package_qmd_vignettes()`.
   rfiles <- grep("[.][Rr]md$", docs, value = TRUE)
   for (rfile in rfiles) {
-    rpath <- asNamespace("tools")$.file_path_relative_to_dir(rfile, dir)
+    # normalizePath() so `rfile` and `dir` use the same separator
+    rpath <- asNamespace("tools")$.file_path_relative_to_dir(
+      normalizePath(rfile),
+      dir
+    )
     rurls <- urls_from_pandoc_md_file(rfile)
     urls <- c(urls, rurls)
     path <- c(path, rep.int(rpath, length(rurls)))

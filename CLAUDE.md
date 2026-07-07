@@ -23,10 +23,6 @@ package code, embedded at [inst/tools/urltools.R](inst/tools/urltools.R).
   - [R/rmd.R](R/rmd.R) — checks URLs in un-rendered Rmd vignettes (needs pandoc).
   - [R/url_update.R](R/url_update.R) — rewrites permanently-redirected (301) URLs in place.
   - [R/utils.R](R/utils.R) — `with_pandoc_available()` and `update_urltools()` (see below).
-- [inst/tools/utils.R](inst/tools/utils.R) is a **compatibility backport** (currently just
-  `lines2str`), sourced into the `tools` env only when `getRversion() < "4.0.0"`. Since
-  DESCRIPTION requires R >= 4.1, this branch is effectively dead code today; keep it only for
-  legacy. Air's reformat suggestion for this file can be ignored — nothing loads it.
 
 ## Maintenance: refreshing the embedded base-R code
 
@@ -36,9 +32,10 @@ This is the main recurring task (see [MAINTENANCE.md](MAINTENANCE.md)).
    `src/library/tools/R/urltools.R` (local checkout, or `update_urltools()` which pulls the
    `wch/r-source` trunk mirror). Do not hand-edit — the file is a faithful mirror. The one
    historical local patch ("Fix fragments", issue #9) is now upstream.
-2. If the new code calls an internal `tools` function not present in supported R versions,
-   backport its definition into [inst/tools/utils.R](inst/tools/utils.R) (the `lines2str`
-   precedent).
+2. If the new code calls an internal `tools` function not present in supported R versions
+   (R >= 4.1), backport it: create `inst/tools/utils.R` with the definition and source it into
+   the `tools` env from [R/zzz.R](R/zzz.R). (This is how `lines2str` was once handled, before it
+   became available in the installed `tools` namespace for all supported R versions.)
 3. Keep this file OUT of Air formatting — it must stay in upstream R-Core style so future
    refreshes are clean diffs. This is enforced by the `[format] exclude` entry in
    [air.toml](air.toml). (Air's `exclude` key lives under `[format]`, not top level; the

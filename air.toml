@@ -1,0 +1,4 @@
+# The embedded copy of R's tools/urltools.R is a verbatim mirror of upstream
+# base R (R-Core formatting). Keep it out of Air so refreshes stay clean diffs.
+[format]
+exclude = ["inst/tools/urltools.R"]

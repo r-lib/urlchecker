@@ -47,7 +47,13 @@ This is the main recurring task (see [MAINTENANCE.md](MAINTENANCE.md)).
 ## Dev workflow
 
 - Load: `uncovr::reload()` (not `pkgload::load_all()`).
-- Tests: `uncovr::test()` — note there is currently **no** `tests/` suite.
+- Tests: `uncovr::test()`. The suite lives in [tests/testthat/](tests/testthat/) and uses
+  testthat 3e. It avoids the network by running a local `webfakes` app
+  ([helper-webfakes.R](tests/testthat/helper-webfakes.R)) that serves `/ok` (200), `/notfound`
+  (404), `/moved` (301→/ok), and `/found` (302→/ok). Key helpers there: `local_url_server()`
+  (background app process), `local_url_db()` (build a `url_db` from a named vector), and the
+  `scrub_urls()` snapshot transform (stabilizes random ports and pointer tildes). Snapshots are
+  in [tests/testthat/_snaps/](tests/testthat/_snaps/).
 - Real verification: run the actual pipeline, e.g.
   `uncovr::reload(); print(urlchecker::url_check("."))`. This needs pandoc on PATH and network
   access; it exercises URL extraction + parallel curl checks + the custom printer. A missing

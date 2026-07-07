@@ -54,20 +54,18 @@
 <li>
 <a href="R/utils.R">R/utils.R</a> — <code>with_pandoc_available()</code> and <code>update_urltools()</code> (see below).</li>
 </ul></li>
-<li>
-<a href="inst/tools/utils.R">inst/tools/utils.R</a> is a <strong>compatibility backport</strong> (currently just <code>lines2str</code>), sourced into the <code>tools</code> env only when <code>getRversion() &lt; "4.0.0"</code>. Since DESCRIPTION requires R &gt;= 4.1, this branch is effectively dead code today; keep it only for legacy. Air’s reformat suggestion for this file can be ignored — nothing loads it.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="maintenance-refreshing-the-embedded-base-r-code">Maintenance: refreshing the embedded base-R code<a class="anchor" aria-label="anchor" href="#maintenance-refreshing-the-embedded-base-r-code"></a></h2>
 <p>This is the main recurring task (see <a href="MAINTENANCE.html">MAINTENANCE.md</a>).</p>
 <ol style="list-style-type: decimal"><li>Overwrite <a href="inst/tools/urltools.R">inst/tools/urltools.R</a> <strong>verbatim</strong> from upstream R’s <code>src/library/tools/R/urltools.R</code> (local checkout, or <code>update_urltools()</code> which pulls the <code>wch/r-source</code> trunk mirror). Do not hand-edit — the file is a faithful mirror. The one historical local patch (“Fix fragments”, issue #9) is now upstream.</li>
-<li>If the new code calls an internal <code>tools</code> function not present in supported R versions, backport its definition into <a href="inst/tools/utils.R">inst/tools/utils.R</a> (the <code>lines2str</code> precedent).</li>
+<li>If the new code calls an internal <code>tools</code> function not present in supported R versions (R &gt;= 4.1), backport it: create <code>inst/tools/utils.R</code> with the definition and source it into the <code>tools</code> env from <a href="R/zzz.R">R/zzz.R</a>. (This is how <code>lines2str</code> was once handled, before it became available in the installed <code>tools</code> namespace for all supported R versions.)</li>
 <li>Keep this file OUT of Air formatting — it must stay in upstream R-Core style so future refreshes are clean diffs. This is enforced by the <code>[format] exclude</code> entry in <a href="air.toml">air.toml</a>. (Air’s <code>exclude</code> key lives under <code>[format]</code>, not top level; the IDE’s TOML schema may wrongly flag it, but Air itself honors it.)</li>
 </ol></div>
 <div class="section level2">
 <h2 id="dev-workflow">Dev workflow<a class="anchor" aria-label="anchor" href="#dev-workflow"></a></h2>
 <ul><li>Load: <code>uncovr::reload()</code> (not <code><a href="https://pkgload.r-lib.org/reference/load_all.html" class="external-link">pkgload::load_all()</a></code>).</li>
-<li>Tests: <code>uncovr::test()</code> — note there is currently <strong>no</strong> <code>tests/</code> suite.</li>
+<li>Tests: <code>uncovr::test()</code>. The suite lives in <a href="tests/testthat/">tests/testthat/</a> and uses testthat 3e. It avoids the network by running a local <code>webfakes</code> app (<a href="tests/testthat/helper-webfakes.R">helper-webfakes.R</a>) that serves <code>/ok</code> (200), <code>/notfound</code> (404), <code>/moved</code> (301→/ok), and <code>/found</code> (302→/ok). Key helpers there: <code>local_url_server()</code> (background app process), <code>local_url_db()</code> (build a <code>url_db</code> from a named vector), and the <code>scrub_urls()</code> snapshot transform (stabilizes random ports and pointer tildes). Snapshots are in <a href="tests/testthat/_snaps/">tests/testthat/_snaps/</a>.</li>
 <li>Real verification: run the actual pipeline, e.g. <code>uncovr::reload(); print(urlchecker::url_check("."))</code>. This needs pandoc on PATH and network access; it exercises URL extraction + parallel curl checks + the custom printer. A missing internal <code>tools</code> function shows up here as a <code>could not find function</code> error (→ backport).</li>
 <li>Formatting: <code>air format .</code> (uses <a href="air.toml">air.toml</a>; leaves <code>urltools.R</code> untouched).</li>
 </ul></div>

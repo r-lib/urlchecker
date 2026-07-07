@@ -36,12 +36,6 @@ copy of R’s `tools` package code, embedded at
     rewrites permanently-redirected (301) URLs in place.
   - [R/utils.R](https://urlchecker.r-lib.org/dev/R/utils.R) —
     `with_pandoc_available()` and `update_urltools()` (see below).
-- [inst/tools/utils.R](https://urlchecker.r-lib.org/dev/inst/tools/utils.R)
-  is a **compatibility backport** (currently just `lines2str`), sourced
-  into the `tools` env only when `getRversion() < "4.0.0"`. Since
-  DESCRIPTION requires R \>= 4.1, this branch is effectively dead code
-  today; keep it only for legacy. Air’s reformat suggestion for this
-  file can be ignored — nothing loads it.
 
 ## Maintenance: refreshing the embedded base-R code
 
@@ -56,9 +50,12 @@ This is the main recurring task (see
     faithful mirror. The one historical local patch (“Fix fragments”,
     issue \#9) is now upstream.
 2.  If the new code calls an internal `tools` function not present in
-    supported R versions, backport its definition into
-    [inst/tools/utils.R](https://urlchecker.r-lib.org/dev/inst/tools/utils.R)
-    (the `lines2str` precedent).
+    supported R versions (R \>= 4.1), backport it: create
+    `inst/tools/utils.R` with the definition and source it into the
+    `tools` env from
+    [R/zzz.R](https://urlchecker.r-lib.org/dev/R/zzz.R). (This is how
+    `lines2str` was once handled, before it became available in the
+    installed `tools` namespace for all supported R versions.)
 3.  Keep this file OUT of Air formatting — it must stay in upstream
     R-Core style so future refreshes are clean diffs. This is enforced
     by the `[format] exclude` entry in
@@ -70,8 +67,17 @@ This is the main recurring task (see
 
 - Load: `uncovr::reload()` (not
   [`pkgload::load_all()`](https://pkgload.r-lib.org/reference/load_all.html)).
-- Tests: `uncovr::test()` — note there is currently **no** `tests/`
-  suite.
+- Tests: `uncovr::test()`. The suite lives in
+  [tests/testthat/](https://urlchecker.r-lib.org/dev/tests/testthat/)
+  and uses testthat 3e. It avoids the network by running a local
+  `webfakes` app
+  ([helper-webfakes.R](https://urlchecker.r-lib.org/dev/tests/testthat/helper-webfakes.R))
+  that serves `/ok` (200), `/notfound` (404), `/moved` (301→/ok), and
+  `/found` (302→/ok). Key helpers there: `local_url_server()`
+  (background app process), `local_url_db()` (build a `url_db` from a
+  named vector), and the `scrub_urls()` snapshot transform (stabilizes
+  random ports and pointer tildes). Snapshots are in
+  [tests/testthat/\_snaps/](https://urlchecker.r-lib.org/dev/tests/testthat/_snaps/).
 - Real verification: run the actual pipeline, e.g.
   `uncovr::reload(); print(urlchecker::url_check("."))`. This needs
   pandoc on PATH and network access; it exercises URL extraction +

@@ -24,6 +24,33 @@ test_that("url_update() rewrites permanently moved URLs in the source", {
   expect_false(any(grepl(moved, updated, fixed = TRUE)))
 })
 
+test_that("url_update() also rewrites README.Rmd when updating README.md", {
+  skip_on_cran()
+
+  web <- local_url_server()
+  moved <- web$url("/moved")
+  target <- web$url("/ok")
+
+  root <- withr::local_tempdir()
+  writeLines(c("readme md", moved), file.path(root, "README.md"))
+  writeLines(c("readme rmd", moved), file.path(root, "README.Rmd"))
+
+  # `url_update()` looks for README.Rmd relative to the working directory.
+  withr::local_dir(root)
+
+  db <- local_url_db(moved, parents = "README.md")
+  res <- url_check(root, db = db, progress = FALSE)
+
+  expect_snapshot(url_update(root, results = res), transform = scrub_urls)
+
+  # Both files were rewritten.
+  for (file in c("README.md", "README.Rmd")) {
+    updated <- readLines(file.path(root, file))
+    expect_true(any(grepl(target, updated, fixed = TRUE)))
+    expect_false(any(grepl(moved, updated, fixed = TRUE)))
+  }
+})
+
 test_that("url_update() leaves plain errors untouched", {
   skip_on_cran()
 

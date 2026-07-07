@@ -43,3 +43,27 @@ test_that("print() suggests a fix for a moved URL", {
 
   expect_snapshot(print(res), transform = scrub_urls)
 })
+
+test_that("print() flags a non-canonical CRAN URL", {
+  # A CRAN URL that is not in canonical form is reported from the `CRAN` column
+  # rather than from a live check, so this needs no server. Build the result
+  # object directly.
+  url <- "https://cran.r-project.org/package=foo"
+  root <- withr::local_tempdir()
+  file <- "DESCRIPTION"
+  writeLines(c("line one", url), file.path(root, file))
+
+  res <- data.frame(
+    URL = url,
+    From = I(list(file)),
+    Status = "200",
+    Message = "OK",
+    New = "",
+    CRAN = url,
+    root = root,
+    stringsAsFactors = FALSE
+  )
+  class(res) <- c("urlchecker_db", "check_url_db", "data.frame")
+
+  expect_snapshot(print(res))
+})

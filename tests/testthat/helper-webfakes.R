@@ -57,3 +57,47 @@ local_url_db <- function(urls, parents = "URLS.txt") {
   urlchecker_tools <- asNamespace("urlchecker")$tools
   urlchecker_tools$url_db(unname(urls), rep_len(parents, length(urls)))
 }
+
+# Write a minimal source package into a temporary directory so the extraction
+# path of `url_check()` (`db = NULL`) can be exercised without a fixture on
+# disk. `desc_url` goes in DESCRIPTION's `URL:` field; when `vignette_url` is
+# supplied an Rmd vignette referencing it is added (this needs pandoc + knitr).
+# Returns the package root, cleaned up when `.local_envir` finishes.
+local_pkg <- function(
+  desc_url,
+  vignette_url = NULL,
+  .local_envir = parent.frame()
+) {
+  root <- withr::local_tempdir(.local_envir = .local_envir)
+
+  desc <- c(
+    "Package: fake",
+    "Title: A Fake Package",
+    "Version: 0.0.1",
+    "Description: A fake package for testing.",
+    paste("URL:", desc_url)
+  )
+  if (!is.null(vignette_url)) {
+    desc <- c(desc, "VignetteBuilder: knitr", "Suggests: knitr, rmarkdown")
+  }
+  writeLines(desc, file.path(root, "DESCRIPTION"))
+
+  if (!is.null(vignette_url)) {
+    dir.create(file.path(root, "vignettes"))
+    writeLines(
+      c(
+        "---",
+        "title: v",
+        "vignette: >",
+        "  %\\VignetteEngine{knitr::rmarkdown}",
+        "  %\\VignetteIndexEntry{v}",
+        "---",
+        "",
+        paste0("See <", vignette_url, ">.")
+      ),
+      file.path(root, "vignettes", "v.Rmd")
+    )
+  }
+
+  root
+}

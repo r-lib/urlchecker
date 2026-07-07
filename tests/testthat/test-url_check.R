@@ -43,6 +43,25 @@ test_that("url_check() suggests the new location for a 301 redirect", {
   expect_equal(res$New, web$url("/ok"))
 })
 
+test_that("url_check() extracts URLs from the package when db is NULL", {
+  skip_on_cran()
+  skip_if_not(nzchar(Sys.which("pandoc")), "pandoc is not available")
+  skip_if_not_installed("knitr")
+
+  web <- local_url_server()
+  ok <- web$url("/ok")
+
+  # Both the DESCRIPTION URL and the vignette URL resolve to the local server,
+  # so extraction (sources + Rmd vignettes) followed by checking finds no
+  # problems.
+  root <- local_pkg(desc_url = ok, vignette_url = ok)
+
+  res <- url_check(root, progress = FALSE)
+
+  expect_s3_class(res, "urlchecker_db")
+  expect_equal(NROW(res), 0)
+})
+
 test_that("url_check() works serially and in parallel", {
   skip_on_cran()
 

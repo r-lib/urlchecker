@@ -24,3 +24,12 @@
          ^~~
          http://{host}/ok
 
+# print() flags a non-canonical CRAN URL
+
+    Code
+      print(res)
+    Message
+      x Error: DESCRIPTION:2:1 Error: CRAN URL not in canonical form
+      https://cran.r-project.org/package=foo
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+

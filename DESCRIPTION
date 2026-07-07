@@ -23,9 +23,13 @@ Imports:
     curl,
     tools,
     xml2
-Suggests: 
-    covr
+Suggests:
+    covr,
+    testthat (>= 3.0.0),
+    webfakes,
+    withr
 Config/Needs/website: tidyverse/tidytemplate
+Config/testthat/edition: 3
 Config/usethis/last-upkeep: 2025-05-07
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

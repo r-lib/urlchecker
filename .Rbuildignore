@@ -12,3 +12,4 @@
 ^\.Rproj\.user$
 ^[\.]?air\.toml$
 ^\.vscode$
+^\.cache$

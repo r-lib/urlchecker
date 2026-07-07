@@ -4,6 +4,7 @@
 ^cran-comments\.md$
 ^codecov\.yml$
 ^MAINTENANCE\.md$
+^CLAUDE\.md$
 ^CRAN-RELEASE$
 ^_pkgdown\.yml$
 ^docs$

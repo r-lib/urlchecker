@@ -9,3 +9,7 @@ tools <- new.env(parent = asNamespace("tools"))
     local = tools
   )
 }
+
+dummy <- function() {
+  xml2::read_html
+}

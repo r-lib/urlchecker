@@ -1,5 +1,11 @@
 vlapply <- function(x, f, ...) vapply(x, f, logical(1))
 
+# Path relative to the current working directory when it is below it,
+# otherwise the path unchanged. Used to keep messages short.
+rel_path <- function(path) {
+  asNamespace("tools")$.file_path_relative_to_dir(path, getwd())
+}
+
 # TRUE if `path` looks like a source package tarball (a `.tar.gz` file).
 is_package_tarball <- function(path) {
   !dir.exists(path) &&
@@ -32,12 +38,17 @@ extract_package_tarball <- function(tarball) {
 
 # makes sure that pandoc is available
 # puts RStudio's pandoc on the PATH if it is the only one available
-with_pandoc_available <- function(code) {
+# When `required` is FALSE, a completely missing pandoc is tolerated (the
+# callers that need it skip rendering gracefully); this is used for non-package
+# paths, where pandoc may not be needed at all.
+with_pandoc_available <- function(code, required = TRUE) {
   pandoc_location <- Sys.which("pandoc")
   if (!nzchar(pandoc_location)) {
     pandoc_path <- Sys.getenv("RSTUDIO_PANDOC")
     if (!nzchar(pandoc_path)) {
-      stop("pandoc is not installed and on the PATH")
+      if (required) {
+        stop("pandoc is not installed and on the PATH")
+      }
     } else {
       sys_path <- Sys.getenv("PATH")
       on.exit(Sys.setenv("PATH" = sys_path))
@@ -77,9 +88,11 @@ check_vignette_builders <- function(path) {
      {?is/are} installed."
   )
   # `system.file()` checks for the package without loading it.
-  missing <- builders[!vlapply(builders, function(p) {
-    nzchar(system.file(package = p))
-  })]
+  missing <- builders[
+    !vlapply(builders, function(p) {
+      nzchar(system.file(package = p))
+    })
+  ]
   if (length(missing)) {
     cli::cli_abort(c(
       "VignetteBuilder package{?s} {.pkg {missing}} {?is/are} not installed.",

@@ -1,15 +1,21 @@
-#' Check urls in a package
+#' Check urls in a package or project
 #'
-#' Runs the `url_db_from_package_source` function in the tools package along
-#' with functions to check URLs in un-rendered Rmarkdown (`.Rmd`) and Quarto
-#' (`.qmd`) vignettes.
+#' For an R package, runs the `url_db_from_package_source` function in the
+#' tools package along with functions to check URLs in un-rendered Rmarkdown
+#' (`.Rmd`) and Quarto (`.qmd`) vignettes. For non-package projects, URLs are
+#' extracted from all supported files found in the given directories.
 #'
-#' @param path Path to the package. Most commonly this is a package's
-#'   (development) source directory tree, but it may also be a directory
-#'   holding an unpacked source package, or the path to a source package
-#'   tarball (`.tar.gz`). A tarball is unpacked into a temporary directory
-#'   (kept for the rest of the session, so the printed report can point
-#'   into the sources).
+#' @param path Path(s) to check. Each element may be:
+#'   * A package's (development) source directory tree, a directory holding an
+#'     unpacked source package, or a source package tarball (`.tar.gz`). A
+#'     tarball is unpacked into a temporary directory (kept for the rest of the
+#'     session, so the printed report can point into the sources).
+#'   * A directory that is not an R package. All supported files found within
+#'     (recursively) are scanned for URLs. Supported files are HTML, PDF, Rd,
+#'     Markdown (`.md`, `.markdown`), R Markdown (`.Rmd`) and Quarto (`.qmd`).
+#'   * A single file of one of the supported types above.
+#'
+#'   `path` may be a character vector mixing any of these.
 #' @param db A url database
 #' @param parallel If `TRUE`, check the URLs in parallel
 #' @param pool A multi handle created by [curl::new_pool()]. If `NULL` use a global pool.
@@ -19,6 +25,7 @@
 #' @examples
 #' \dontrun{
 #' url_check("my_pkg")
+#' url_check(c("README.md", "docs"))
 #' }
 #' @export
 url_check <- function(
@@ -31,20 +38,16 @@ url_check <- function(
   opts <- options(timeout = 5)
   on.exit(options(opts), add = TRUE)
 
-  path <- normalizePath(path, mustWork = TRUE)
-  if (is_package_tarball(path)) {
-    path <- extract_package_tarball(path)
-  }
-
   if (is.null(db)) {
-    check_vignette_builders(path)
-    db <- with_pandoc_available(
-      rbind(
-        tools$url_db_from_package_sources(path),
-        url_db_from_package_rmd_vignettes(path),
-        url_db_from_package_qmd_vignettes(path)
-      )
-    )
+    path <- normalizePath(path, mustWork = TRUE)
+    required <- any(vlapply(
+      path,
+      function(p) is_package_tarball(p) || is_package_dir(p)
+    ))
+    db <- with_pandoc_available(build_url_db(path), required = required)
+    root <- attr(db, "root")
+  } else {
+    root <- normalizePath(path, mustWork = TRUE)
   }
 
   res <- tools$check_url_db(
@@ -54,10 +57,71 @@ url_check <- function(
     verbose = progress
   )
   if (NROW(res) > 0) {
-    res$root <- path
+    res$root <- root
   }
   class(res) <- c("urlchecker_db", class(res))
   res
+}
+
+# Build a `url_db` from one or more paths (packages, directories or files),
+# emitting a message for each. Parents are made relative to a common root
+# directory, which is attached as the `"root"` attribute for the printer.
+build_url_db <- function(paths) {
+  dbs <- list()
+  locations <- character()
+  for (path in paths) {
+    if (is_package_tarball(path)) {
+      cli::cli_alert_info("Tarball {.file {rel_path(path)}}")
+      pkgdir <- extract_package_tarball(path)
+      dbs <- c(dbs, list(package_url_db(pkgdir)))
+      locations <- c(locations, pkgdir)
+    } else if (is_package_dir(path)) {
+      name <- read.dcf(file.path(path, "DESCRIPTION"), fields = "Package")[1, 1]
+      cli::cli_alert_info("Package {.pkg {name}}")
+      dbs <- c(dbs, list(package_url_db(path)))
+      locations <- c(locations, path)
+    } else if (dir.exists(path)) {
+      cli::cli_alert_info("Directory {.file {rel_path(path)}}")
+      dbs <- c(dbs, list(url_db_from_dir(path)))
+      locations <- c(locations, path)
+    } else {
+      cli::cli_alert_info("File {.file {rel_path(path)}}")
+      dbs <- c(dbs, list(url_db_from_file(path)))
+      locations <- c(locations, path)
+    }
+  }
+
+  root <- if (length(locations) == 1L) {
+    if (dir.exists(locations)) locations else dirname(locations)
+  } else {
+    common_dir(locations)
+  }
+
+  db <- do.call(rbind, dbs)
+  if (NROW(db)) {
+    db$Parent <- asNamespace("tools")$.file_path_relative_to_dir(
+      db$Parent,
+      root
+    )
+  }
+  attr(db, "root") <- root
+  db
+}
+
+# Build a `url_db` for an R package directory, combining the base-R package
+# sources with the Rmd/qmd vignette checks. Parents are returned as absolute
+# paths (they come back relative to `dir`) so `build_url_db()` can rebase them.
+package_url_db <- function(dir) {
+  check_vignette_builders(dir)
+  db <- rbind(
+    tools$url_db_from_package_sources(dir),
+    url_db_from_package_rmd_vignettes(dir),
+    url_db_from_package_qmd_vignettes(dir)
+  )
+  if (NROW(db)) {
+    db$Parent <- file.path(dir, db$Parent)
+  }
+  db
 }
 
 #' @export

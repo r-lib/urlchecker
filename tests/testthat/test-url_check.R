@@ -93,7 +93,93 @@ test_that("url_check() errors on a tarball that is not a package", {
   tarball <- file.path(dir, "notpkg.tar.gz")
   withr::with_dir(dir, utils::tar(tarball, "notpkg", compression = "gzip"))
 
-  expect_snapshot(url_check(tarball), error = TRUE)
+  # The message reports the tarball path (temp dir, not under the working
+  # directory); scrub its directory so the snapshot is reproducible.
+  expect_snapshot(
+    url_check(tarball),
+    error = TRUE,
+    transform = function(x) {
+      gsub("Tarball '.*/(notpkg.tar.gz)'", "Tarball '\\1'", x)
+    }
+  )
+})
+
+test_that("url_check() scans a non-package directory", {
+  skip_on_cran()
+
+  web <- local_url_server()
+  ok <- web$url("/ok")
+  bad <- web$url("/notfound")
+
+  # A plain directory (no DESCRIPTION) holding an HTML file. HTML extraction
+  # needs only xml2, no pandoc/quarto.
+  skip_if_not_installed("xml2")
+  root <- withr::local_tempdir()
+  writeLines(
+    sprintf(
+      "<html><body><a href='%s'>ok</a><a href='%s'>bad</a></body></html>",
+      ok,
+      bad
+    ),
+    file.path(root, "page.html")
+  )
+
+  res <- suppressMessages(url_check(root, progress = FALSE))
+
+  expect_s3_class(res, "urlchecker_db")
+  expect_equal(res$URL, bad)
+  expect_equal(res$From[[1]], "page.html")
+})
+
+test_that("url_check() checks a single file", {
+  skip_on_cran()
+  skip_if_not_installed("xml2")
+
+  web <- local_url_server()
+  bad <- web$url("/notfound")
+
+  root <- withr::local_tempdir()
+  file <- file.path(root, "page.html")
+  writeLines(
+    sprintf("<html><body><a href='%s'>bad</a></body></html>", bad),
+    file
+  )
+
+  res <- suppressMessages(url_check(file, progress = FALSE))
+
+  expect_equal(res$URL, bad)
+  # The single-file root is the file's directory, so `From` is the basename.
+  expect_equal(res$From[[1]], "page.html")
+  expect_equal(res$root[[1]], normalizePath(root))
+})
+
+test_that("url_check() accepts a mix of files and directories", {
+  skip_on_cran()
+  skip_if_not_installed("xml2")
+
+  web <- local_url_server()
+  bad1 <- web$url("/notfound")
+
+  root <- withr::local_tempdir()
+  sub <- file.path(root, "docs")
+  dir.create(sub)
+  loose <- file.path(root, "loose.html")
+  writeLines(
+    sprintf("<html><body><a href='%s'>b</a></body></html>", bad1),
+    loose
+  )
+  writeLines(
+    sprintf("<html><body><a href='%s'>b</a></body></html>", bad1),
+    file.path(sub, "nested.html")
+  )
+
+  res <- suppressMessages(url_check(c(loose, sub), progress = FALSE))
+
+  # Same broken URL from both inputs; `From` lists both, relative to the common
+  # root directory.
+  expect_equal(res$URL, bad1)
+  expect_setequal(res$From[[1]], c("loose.html", "docs/nested.html"))
+  expect_equal(res$root[[1]], normalizePath(root))
 })
 
 test_that("url_check() works serially and in parallel", {

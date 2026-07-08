@@ -28,21 +28,36 @@ pak::pak("r-lib/urlchecker")
 
 ``` r
 library(urlchecker)
+```
 
+```
 # `url_check()` will check all URLs in a package, as is done by CRAN when
 # submitting a package.
 url_check("path/to/pkg")
+```
 
+```
 # `url_update()` will check all URLs in a package, then update any 301
 # redirects automatically to their new location.
 url_update("path/to/pkg")
+```
 
+```
 # You can also point `url_check()` at a built source package tarball. It is
 # unpacked into a temporary directory and checked from there. Because the
 # tarball contains the rendered vignettes, this also checks URLs in the
 # built vignettes.
 tarball <- pkgbuild::build("path/to/pkg")
 url_check(tarball)
+```
+
+```
+# `url_check()` also works on non-package projects: point it at a directory
+# that is not a package (all supported files within are scanned), a single
+# file, or a mix of directories and files. Supported files are HTML, PDF, Rd,
+# Markdown (`.md`), R Markdown (`.Rmd`) and Quarto (`.qmd`).
+url_check("path/to/project")
+url_check(c("README.md", "docs"))
 ```
 
 ## Code of Conduct

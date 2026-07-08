@@ -1,5 +1,11 @@
 # urlchecker (development version)
 
+* `url_check()` now also works on non-package projects. `path` may be a
+  directory that is not an R package (all supported files within are
+  scanned), a single file, or a character vector mixing packages,
+  directories and files. Supported file types are HTML, PDF, Rd, Markdown
+  (`.md`, `.markdown`), R Markdown (`.Rmd`) and Quarto (`.qmd`).
+
 * `url_check()` now also checks URLs in Quarto (`.qmd`) vignettes,
   rendering them with `quarto` (the un-evaluated document, in the same way
   `.Rmd` vignettes are rendered with pandoc).

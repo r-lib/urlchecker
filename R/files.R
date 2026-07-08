@@ -23,8 +23,8 @@ is_package_dir <- function(path) {
 }
 
 # Extract URLs from a single file, dispatching on its extension. Rendering
-# formats (md/Rmd/qmd) silently yield nothing when the required external tool
-# (pandoc/quarto) is missing; likewise HTML/PDF when xml2/pdftohtml is missing.
+# formats (md/Rmd/qmd) error when the required external tool (pandoc/quarto) is
+# missing; HTML/PDF silently yield nothing when xml2/pdftohtml is missing.
 urls_from_file <- function(file) {
   ext <- tolower(tools::file_ext(file))
   switch(

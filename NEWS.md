@@ -18,6 +18,10 @@
   `DESCRIPTION` is not installed, as it is needed to render the vignettes
   for URL checking.
 
+* `url_check()` now errors, instead of silently skipping the file, when
+  pandoc (for `.md`/`.Rmd` files) or quarto (for `.qmd` files) is needed to
+  render a file but cannot be found on the `PATH`.
+
 * Handle URL fragments in redirects (#9).
 
 * `url_check()` now also handles package tarballs. This is useful to check

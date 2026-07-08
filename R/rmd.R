@@ -18,11 +18,16 @@ url_db_from_package_rmd_vignettes <- function(dir) {
 }
 
 # Extract URLs from a Markdown-family file (`.md`, `.Rmd`) by rendering it to
-# HTML with pandoc and scraping the links. Returns `character()` if pandoc is
-# not available or the render fails.
+# HTML with pandoc and scraping the links. Errors if pandoc is not available
+# (it is required to render the file); returns `character()` if the render
+# fails.
 urls_from_pandoc_md_file <- function(file) {
   if (!nzchar(Sys.which("pandoc"))) {
-    return(character())
+    cli::cli_abort(c(
+      "pandoc is required to check URLs in {.file {basename(file)}}, \\
+       but it was not found.",
+      "i" = "Install pandoc and make sure it is on the PATH."
+    ))
   }
   tfile <- tempfile(fileext = ".html")
   on.exit(unlink(tfile), add = TRUE)

@@ -18,11 +18,15 @@ url_db_from_package_qmd_vignettes <- function(dir) {
 }
 
 # Extract URLs from a `.qmd` file by rendering it to HTML with quarto and
-# scraping the links. Returns `character()` if quarto is not available or the
-# render fails.
+# scraping the links. Errors if quarto is not available (it is required to
+# render the file); returns `character()` if the render fails.
 urls_from_quarto_qmd_file <- function(file) {
   if (!nzchar(Sys.which("quarto"))) {
-    return(character())
+    cli::cli_abort(c(
+      "quarto is required to check URLs in {.file {basename(file)}}, \\
+       but it was not found.",
+      "i" = "Install quarto and make sure it is on the PATH."
+    ))
   }
   # quarto writes supporting files (`*_files/`) next to the input, so render a
   # copy in a temp dir to keep the sources clean; the HTML itself is captured

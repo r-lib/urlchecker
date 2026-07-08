@@ -7,7 +7,7 @@ check and then updates any URLs which are permanent (301) redirects.
 ## Usage
 
 ``` r
-url_update(path = ".", results = url_check(path))
+url_update(path = ".", results = url_check(path, fail = FALSE))
 ```
 
 ## Arguments

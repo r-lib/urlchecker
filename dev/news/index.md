@@ -2,6 +2,13 @@
 
 ## urlchecker (development version)
 
+- [`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
+  gains a `fail` argument. When `TRUE` (the default) it throws an error
+  after printing the report if any URLs are flagged, yielding a non-zero
+  exit status for CI/CD workflows. Set `fail = FALSE` to return the
+  results instead
+  ([\#42](https://github.com/r-lib/urlchecker/issues/42)).
+
 - The
   [`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
   report now prints the `file:line:col` location of each flagged URL as

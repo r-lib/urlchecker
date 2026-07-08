@@ -53,7 +53,8 @@ extracted from all supported files found in the given directories.</p>
 <span>  db <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  parallel <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  pool <span class="op">=</span> <span class="fu">curl</span><span class="fu">::</span><span class="fu"><a href="https://jeroen.r-universe.dev/curl/reference/multi.html" class="external-link">new_pool</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  progress <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  progress <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fail <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -87,6 +88,13 @@ Markdown (<code>.md</code>, <code>.markdown</code>), R Markdown (<code>.Rmd</cod
 
 <dt id="arg-progress">progress<a class="anchor" aria-label="anchor" href="#arg-progress"></a></dt>
 <dd><p>Whether to show the progress bar for parallel checks</p></dd>
+
+
+<dt id="arg-fail">fail<a class="anchor" aria-label="anchor" href="#arg-fail"></a></dt>
+<dd><p>If <code>TRUE</code> (the default), throw an error when one or more URLs
+are flagged, after printing the report. This yields a non-zero exit status,
+which is useful in CI/CD workflows. Set to <code>FALSE</code> to return the results
+instead of failing.</p></dd>
 
 </dl></div>
     <div class="section level2">

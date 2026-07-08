@@ -14,7 +14,8 @@ url_check(
   db = NULL,
   parallel = TRUE,
   pool = curl::new_pool(),
-  progress = TRUE
+  progress = TRUE,
+  fail = TRUE
 )
 ```
 
@@ -55,6 +56,13 @@ url_check(
 - progress:
 
   Whether to show the progress bar for parallel checks
+
+- fail:
+
+  If `TRUE` (the default), throw an error when one or more URLs are
+  flagged, after printing the report. This yields a non-zero exit
+  status, which is useful in CI/CD workflows. Set to `FALSE` to return
+  the results instead of failing.
 
 ## Value
 

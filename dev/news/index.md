@@ -2,6 +2,12 @@
 
 ## urlchecker (development version)
 
+- The
+  [`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
+  report no longer errors when a flagged URL is empty (e.g. a Markdown
+  `[]()` link); the empty URL is now reported without a source-line
+  pointer ([\#47](https://github.com/r-lib/urlchecker/issues/47)).
+
 - [`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
   now checks URLs in BibTeX (`.bib`) bibliography files
   ([\#13](https://github.com/r-lib/urlchecker/issues/13)).

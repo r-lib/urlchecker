@@ -42,6 +42,8 @@ urls_from_pandoc_md_file <- function(file) {
 # adapted from https://github.com/wch/r-source/blob/58d223cf3eaa50ff8cfc2caf591d67350e549e4a/src/library/tools/R/utils.R#L1847-L1857
 # Adding the autolink_bare_uris extension
 .pandoc_md_for_CRAN2 <- function(ifile, ofile) {
+  ifile <- rewrite_knitr_fences(ifile)
+  on.exit(unlink(ifile), add = TRUE)
   asNamespace("tools")$.system_with_capture(
     "pandoc",
     paste(
@@ -55,4 +57,13 @@ urls_from_pandoc_md_file <- function(file) {
       shQuote(ofile)
     )
   )
+}
+
+# Rewrite opening ```{r ...}`, etc. to ```r, so URLs are ignored in it.
+rewrite_knitr_fences <- function(file) {
+  lines <- readLines(file, warn = FALSE, encoding = "UTF-8")
+  lines <- sub("^(\\s*`{3,})\\{[a-zA-Z][^}]*\\}[ \t]*$", "\\1r", lines)
+  tfile <- tempfile(fileext = ".md")
+  writeLines(lines, tfile, useBytes = TRUE)
+  tfile
 }

@@ -19,6 +19,28 @@ test_that("url_db_from_package_qmd_vignettes() extracts URLs from vignettes", {
   expect_equal(db$Parent, "vignettes/v.qmd")
 })
 
+test_that("url_db_from_package_qmd_vignettes() ignores code-cell URLs (#50)", {
+  skip_on_cran()
+  skip_if_not(nzchar(Sys.which("quarto")), "quarto is not available")
+  skip_if_not_installed("quarto")
+
+  prose_url <- "https://httpbin.org/status/200"
+  code_url <- "https://httpbin.org/status/404"
+  root <- local_pkg(
+    desc_url = "https://example.com",
+    qmd_vignette_url = prose_url,
+    qmd_vignette_code_url = code_url
+  )
+
+  db <- asNamespace("urlchecker")$url_db_from_package_qmd_vignettes(
+    normalizePath(root)
+  )
+
+  # The prose URL is checked; the code-cell URL is not (quarto renders cells as
+  # code natively, so this holds without the Rmd fence rewrite).
+  expect_equal(db$URL, prose_url)
+})
+
 test_that("url_db_from_package_qmd_vignettes() is empty when there are no vignettes", {
   skip_on_cran()
 

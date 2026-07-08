@@ -1,5 +1,8 @@
 # urlchecker (development version)
 
+* `url_check()` no longer reports URLs that appear inside code chunks of
+  `.Rmd` vignettes (#50).
+
 * `url_check()` now reads an optional `.urlignore` file (from the project
   root or from `tools/`). URLs matching its glob patterns are skipped and
   never requested, which is useful for links to private repositories or

@@ -77,7 +77,9 @@ local_url_db <- function(urls, parents = "URLS.txt") {
 local_pkg <- function(
   desc_url,
   vignette_url = NULL,
+  vignette_code_url = NULL,
   qmd_vignette_url = NULL,
+  qmd_vignette_code_url = NULL,
   .local_envir = parent.frame()
 ) {
   root <- withr::local_tempdir(.local_envir = .local_envir)
@@ -111,6 +113,16 @@ local_pkg <- function(
   }
 
   if (!is.null(vignette_url)) {
+    code_chunk <- if (!is.null(vignette_code_url)) {
+      c(
+        "",
+        "```{r eval = FALSE, purl = FALSE}",
+        "library(pkg)",
+        "",
+        paste0("x <- \"", vignette_code_url, "\"  # not a real URL to check"),
+        "```"
+      )
+    }
     writeLines(
       c(
         "---",
@@ -120,13 +132,28 @@ local_pkg <- function(
         "  %\\VignetteIndexEntry{v}",
         "---",
         "",
-        paste0("See <", vignette_url, ">.")
+        paste0("See <", vignette_url, ">."),
+        code_chunk
       ),
       file.path(root, "vignettes", "v.Rmd")
     )
   }
 
   if (!is.null(qmd_vignette_url)) {
+    code_chunk <- if (!is.null(qmd_vignette_code_url)) {
+      c(
+        "",
+        "```{r eval = FALSE, purl = FALSE}",
+        "library(pkg)",
+        "",
+        paste0(
+          "x <- \"",
+          qmd_vignette_code_url,
+          "\"  # not a real URL to check"
+        ),
+        "```"
+      )
+    }
     writeLines(
       c(
         "---",
@@ -136,7 +163,8 @@ local_pkg <- function(
         "  %\\VignetteIndexEntry{v}",
         "---",
         "",
-        paste0("See <", qmd_vignette_url, ">.")
+        paste0("See <", qmd_vignette_url, ">."),
+        code_chunk
       ),
       file.path(root, "vignettes", "v.qmd")
     )

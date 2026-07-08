@@ -18,6 +18,59 @@ test_that("url_db_from_package_rmd_vignettes() extracts URLs from vignettes", {
   expect_equal(db$Parent, "vignettes/v.Rmd")
 })
 
+test_that("url_db_from_package_rmd_vignettes() ignores code-chunk URLs (#50)", {
+  skip_on_cran()
+  skip_if_not(nzchar(Sys.which("pandoc")), "pandoc is not available")
+  skip_if_not_installed("knitr")
+
+  prose_url <- "https://httpbin.org/status/200"
+  code_url <- "https://httpbin.org/status/404"
+  root <- local_pkg(
+    desc_url = "https://example.com",
+    vignette_url = prose_url,
+    vignette_code_url = code_url
+  )
+
+  db <- asNamespace("urlchecker")$url_db_from_package_rmd_vignettes(
+    normalizePath(root)
+  )
+
+  # The prose URL is checked; the code-chunk URL is not.
+  expect_equal(db$URL, prose_url)
+})
+
+test_that("rewrite_knitr_fences() normalises knitr chunk headers", {
+  rewrite_knitr_fences <- asNamespace("urlchecker")$rewrite_knitr_fences
+
+  in_file <- withr::local_tempfile(
+    lines = c(
+      "Prose <https://example.com/prose>.",
+      "",
+      "```{r eval = FALSE, purl = FALSE}",
+      "x <- \"https://example.com/in-code\"",
+      "```",
+      "",
+      "```{python}",
+      "y = 1",
+      "```",
+      "",
+      "```{.r .numberLines}",
+      "kept as-is",
+      "```"
+    )
+  )
+  out <- readLines(rewrite_knitr_fences(in_file))
+
+  # knitr chunk headers become plain fences; the closing fences and pandoc
+  # attribute fences (leading `.`) are untouched.
+  expect_equal(out[[3]], "```r")
+  expect_equal(out[[7]], "```r")
+  expect_equal(out[[11]], "```{.r .numberLines}")
+  # Non-fence lines are preserved verbatim.
+  expect_equal(out[[1]], "Prose <https://example.com/prose>.")
+  expect_equal(out[[4]], "x <- \"https://example.com/in-code\"")
+})
+
 test_that("url_db_from_package_rmd_vignettes() is empty when there are no vignettes", {
   skip_on_cran()
 

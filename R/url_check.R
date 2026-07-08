@@ -51,6 +51,14 @@ url_check <- function(
   opts <- options(timeout = 5)
   on.exit(options(opts), add = TRUE)
 
+  ua <- Sys.getenv("_R_CHECK_URLS_CURL_USER_AGENT_", cran_user_agent)
+  old_hdrs <- tools$.curl_handle_default_hdrs
+  tools$.curl_handle_default_hdrs <- utils::modifyList(
+    old_hdrs,
+    list("User-Agent" = ua)
+  )
+  on.exit(tools$.curl_handle_default_hdrs <- old_hdrs, add = TRUE)
+
   if (is.null(db)) {
     path <- normalizePath(path, winslash = "/", mustWork = TRUE)
     required <- any(vlapply(
@@ -93,6 +101,13 @@ url_check <- function(
 
   res
 }
+
+# The User-Agent CRAN sets for its incoming URL checks (via
+# `_R_CHECK_URLS_CURL_USER_AGENT_`). Kept in sync with CRAN's check scripts:
+# https://github.com/r-devel/r-dev-web/blob/main/CRAN/QA/Kurt/lib/R/Scripts/check_CRAN_incoming.R
+cran_user_agent <-
+  "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0"
+
 
 # Build a `url_db` from one or more paths (packages, directories or files),
 # emitting a message for each. Parents are made relative to a common root

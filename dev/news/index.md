@@ -3,6 +3,19 @@
 ## urlchecker (development version)
 
 - [`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
+  now ignores the same HTTP status codes that CRAN ignores in its
+  incoming URL checks: 202, 401, 403, and 429. This makes results match
+  what CRAN reports and avoids false positives from servers that return.
+  Set the `_R_CHECK_URLS_HTTP_STATUS_IGNORE_REGEXP_` environment
+  variable to override it.
+
+- [`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
+  now sends the same browser-like `User-Agent` header that CRAN uses for
+  its URL checks. Set the `_R_CHECK_URLS_CURL_USER_AGENT_` environment
+  variable to override it
+  ([\#26](https://github.com/r-lib/urlchecker/issues/26)).
+
+- [`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
   no longer reports URLs that appear inside code chunks of `.Rmd`
   vignettes ([\#50](https://github.com/r-lib/urlchecker/issues/50)).
 

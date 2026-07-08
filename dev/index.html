@@ -100,6 +100,15 @@ https://github.com/acme-private/*
 https://example.com/behind-a-login</code></pre>
 <p>Note that CRAN’s own URL checks do not read <code>.urlignore</code>, so an ignored URL may still be flagged when the package is submitted to CRAN.</p>
 </div>
+<div class="section level3">
+<h3 id="environment-variables">Environment variables<a class="anchor" aria-label="anchor" href="#environment-variables"></a>
+</h3>
+<p><code><a href="reference/url_check.html">url_check()</a></code> mirrors CRAN’s incoming URL checks, which are controlled by a few environment variables. urlchecker uses the same variables and defaults to the same values CRAN uses, so results match what CRAN reports. Set a variable yourself to override the default.</p>
+<ul>
+<li><p><code>_R_CHECK_URLS_HTTP_STATUS_IGNORE_REGEXP_</code> — HTTP status codes to treat as OK rather than flag. Defaults to <code>"202|401|403|429"</code> (Accepted, Unauthorized, Forbidden, Too Many Requests), matching CRAN.</p></li>
+<li><p><code>_R_CHECK_URLS_CURL_USER_AGENT_</code> — the <code>User-Agent</code> header sent with each request. Defaults to the browser-like string CRAN uses.</p></li>
+</ul>
+</div>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>

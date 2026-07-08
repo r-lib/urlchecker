@@ -61,6 +61,14 @@ test_that("check_vignette_builders() passes when there is no VignetteBuilder", {
   expect_silent(check_vignette_builders(root))
 })
 
+test_that("check_vignette_builders() passes when there is no DESCRIPTION", {
+  check_vignette_builders <- asNamespace("urlchecker")$check_vignette_builders
+
+  root <- withr::local_tempdir()
+
+  expect_silent(check_vignette_builders(root))
+})
+
 test_that("check_vignette_builders() passes for installed builders", {
   check_vignette_builders <- asNamespace("urlchecker")$check_vignette_builders
 

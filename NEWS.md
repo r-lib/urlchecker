@@ -1,5 +1,9 @@
 # urlchecker (development version)
 
+* `url_check()` now also checks URLs in Quarto (`.qmd`) vignettes,
+  rendering them with `quarto` (the un-evaluated document, in the same way
+  `.Rmd` vignettes are rendered with pandoc).
+
 * `url_check()` now errors if a `VignetteBuilder` package listed in the
   `DESCRIPTION` is not installed, as it is needed to render the vignettes
   for URL checking.

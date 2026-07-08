@@ -66,6 +66,7 @@ local_url_db <- function(urls, parents = "URLS.txt") {
 local_pkg <- function(
   desc_url,
   vignette_url = NULL,
+  qmd_vignette_url = NULL,
   .local_envir = parent.frame()
 ) {
   root <- withr::local_tempdir(.local_envir = .local_envir)
@@ -77,13 +78,28 @@ local_pkg <- function(
     "Description: A fake package for testing.",
     paste("URL:", desc_url)
   )
-  if (!is.null(vignette_url)) {
-    desc <- c(desc, "VignetteBuilder: knitr", "Suggests: knitr, rmarkdown")
+  builders <- c(
+    if (!is.null(vignette_url)) "knitr",
+    if (!is.null(qmd_vignette_url)) "quarto"
+  )
+  if (length(builders)) {
+    suggests <- c(
+      if (!is.null(vignette_url)) c("knitr", "rmarkdown"),
+      if (!is.null(qmd_vignette_url)) "quarto"
+    )
+    desc <- c(
+      desc,
+      paste("VignetteBuilder:", paste(builders, collapse = ", ")),
+      paste("Suggests:", paste(suggests, collapse = ", "))
+    )
   }
   writeLines(desc, file.path(root, "DESCRIPTION"))
 
-  if (!is.null(vignette_url)) {
+  if (!is.null(vignette_url) || !is.null(qmd_vignette_url)) {
     dir.create(file.path(root, "vignettes"))
+  }
+
+  if (!is.null(vignette_url)) {
     writeLines(
       c(
         "---",
@@ -96,6 +112,22 @@ local_pkg <- function(
         paste0("See <", vignette_url, ">.")
       ),
       file.path(root, "vignettes", "v.Rmd")
+    )
+  }
+
+  if (!is.null(qmd_vignette_url)) {
+    writeLines(
+      c(
+        "---",
+        "title: v",
+        "vignette: >",
+        "  %\\VignetteEngine{quarto::html}",
+        "  %\\VignetteIndexEntry{v}",
+        "---",
+        "",
+        paste0("See <", qmd_vignette_url, ">.")
+      ),
+      file.path(root, "vignettes", "v.qmd")
     )
   }
 

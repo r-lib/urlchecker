@@ -34,7 +34,8 @@ with an added class with a custom print method.
 }
 \description{
 Runs the \code{url_db_from_package_source} function in the tools package along
-with a function to check URLs in un-rendered Rmarkdown vignettes.
+with functions to check URLs in un-rendered Rmarkdown (\code{.Rmd}) and Quarto
+(\code{.qmd}) vignettes.
 }
 \examples{
 \dontrun{

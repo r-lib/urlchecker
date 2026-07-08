@@ -1,6 +1,9 @@
 url_db_from_package_rmd_vignettes <- function(dir) {
   urls <- path <- character()
-  rfiles <- Filter(file.exists, tools::pkgVignettes(dir = dir)$docs)
+  docs <- Filter(file.exists, tools::pkgVignettes(dir = dir)$docs)
+  # Only Rmd vignettes are rendered with pandoc; qmd vignettes go through quarto
+  # in `url_db_from_package_qmd_vignettes()`.
+  rfiles <- grep("[.][Rr]md$", docs, value = TRUE)
   for (rfile in rfiles) {
     if (!is.na(rfile) && nzchar(Sys.which("pandoc"))) {
       rpath <- asNamespace("tools")$.file_path_relative_to_dir(rfile, dir)

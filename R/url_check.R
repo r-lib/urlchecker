@@ -1,7 +1,8 @@
 #' Check urls in a package
 #'
 #' Runs the `url_db_from_package_source` function in the tools package along
-#' with a function to check URLs in un-rendered Rmarkdown vignettes.
+#' with functions to check URLs in un-rendered Rmarkdown (`.Rmd`) and Quarto
+#' (`.qmd`) vignettes.
 #'
 #' @param path Path to the package. Most commonly this is a package's
 #'   (development) source directory tree, but it may also be a directory
@@ -40,7 +41,8 @@ url_check <- function(
     db <- with_pandoc_available(
       rbind(
         tools$url_db_from_package_sources(path),
-        url_db_from_package_rmd_vignettes(path)
+        url_db_from_package_rmd_vignettes(path),
+        url_db_from_package_qmd_vignettes(path)
       )
     )
   }

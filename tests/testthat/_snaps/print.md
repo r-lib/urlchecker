@@ -24,6 +24,13 @@
          ^~~
          http://{host}/ok
 
+# print() handles an empty URL without erroring (#47)
+
+    Code
+      print(res)
+    Message
+      x Error: NEWS.md Empty URL
+
 # print() flags a non-canonical CRAN URL
 
     Code

@@ -181,6 +181,19 @@ print.urlchecker_db <- function(x, ...) {
 
     for (file in from) {
       file_path <- file.path(root, file)
+
+      # An empty URL (e.g. Markdown `[]()`) has no text to locate within the
+      # file, so report it without a source-line pointer (#47).
+      if (!nzchar(url)) {
+        loc <- cli::style_hyperlink(
+          text = file,
+          url = paste0("file://", file_path)
+        )
+        detail <- if (nzchar(status)) paste0(status, ": ", message) else message
+        cli::cli_alert_danger("{.strong Error:} {loc} {.emph {detail}}")
+        next
+      }
+
       data <- readLines(file_path)
       match <- regexpr(url, data, fixed = TRUE)
       lines <- which(match != -1)

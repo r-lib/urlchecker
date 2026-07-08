@@ -1,5 +1,9 @@
 # urlchecker (development version)
 
+* The `url_check()` report no longer errors when a flagged URL is empty
+  (e.g. a Markdown `[]()` link); the empty URL is now reported without a
+  source-line pointer (#47).
+
 * `url_check()` now checks URLs in BibTeX (`.bib`) bibliography files (#13).
 
 * `url_check()` now finds a GitHub token in the git credential store (via

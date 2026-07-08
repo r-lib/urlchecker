@@ -44,6 +44,29 @@ test_that("print() suggests a fix for a moved URL", {
   expect_snapshot(print(res), transform = scrub_urls)
 })
 
+test_that("print() handles an empty URL without erroring (#47)", {
+  # An empty URL (e.g. Markdown `[]()`) is flagged as "Empty URL" but cannot be
+  # located within the source, so it must print without a line pointer rather
+  # than erroring in `strrep()`. Build the result object directly (no server).
+  root <- withr::local_tempdir()
+  file <- "NEWS.md"
+  writeLines("[]()", file.path(root, file))
+
+  res <- data.frame(
+    URL = "",
+    From = I(list(file)),
+    Status = "",
+    Message = "Empty URL",
+    New = "",
+    CRAN = "",
+    root = root,
+    stringsAsFactors = FALSE
+  )
+  class(res) <- c("urlchecker_db", "check_url_db", "data.frame")
+
+  expect_snapshot(print(res))
+})
+
 test_that("print() flags a non-canonical CRAN URL", {
   # A CRAN URL that is not in canonical form is reported from the `CRAN` column
   # rather than from a live check, so this needs no server. Build the result

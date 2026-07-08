@@ -11,5 +11,5 @@ tools <- new.env(parent = asNamespace("tools"))
 }
 
 dummy <- function() {
-  xml2::read_html
+  xml2::read_html # nocov
 }

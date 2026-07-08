@@ -160,11 +160,16 @@ print.urlchecker_db <- function(x, ...) {
           "^",
           strrep("~", ends[[i]] - starts[[i]] - 1)
         )
+        loc <- cli::style_hyperlink(
+          text = paste0(file, ":", lines[[i]], ":", starts[[i]]),
+          url = paste0("file://", file_path),
+          params = c(line = lines[[i]], col = starts[[i]])
+        )
         if (nzchar(new)) {
           fix_it <- paste0(strrep(" ", starts[[i]] - 1), new)
           cli::cli_alert_warning(
             "
-            {.strong Warning:} {file}:{lines[[i]]}:{starts[[i]]} {.emph Moved}
+            {.strong Warning:} {loc} {.emph Moved}
             {data[lines[[i]]]}
             {pointer}
             {fix_it}
@@ -173,7 +178,7 @@ print.urlchecker_db <- function(x, ...) {
         } else {
           cli::cli_alert_danger(
             "
-          {.strong Error:} {file}:{lines[[i]]}:{starts[[i]]} {.emph {status}: {message}}
+          {.strong Error:} {loc} {.emph {status}: {message}}
           {data[lines[[i]]]}
           {pointer}
           "

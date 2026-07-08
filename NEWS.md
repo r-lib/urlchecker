@@ -1,5 +1,9 @@
 # urlchecker (development version)
 
+* The `url_check()` report now prints the `file:line:col` location of each
+  flagged URL as a clickable hyperlink, so you can jump straight to the
+  problem in supporting IDEs and terminals (#23).
+
 * `url_check()` now also works on non-package projects. `path` may be a
   directory that is not an R package (all supported files within are
   scanned), a single file, or a character vector mixing packages,

@@ -248,6 +248,74 @@ test_that("url_check() validates its arguments", {
   expect_error(url_check(".", fail = 1), "`fail` must be")
 })
 
+test_that("url_check() checks with a browser-like User-Agent like CRAN (#26)", {
+  skip_on_cran()
+
+  web <- local_url_server()
+  # This URL 403s the bare "curl" default UA but is fine for a browser-like one,
+  # like the servers reported in #26. url_check() sends CRAN's User-Agent, so it
+  # must not be flagged.
+  db <- local_url_db(web$url("/needs-browser-ua"))
+
+  res <- url_check(tempdir(), db = db, progress = FALSE, fail = FALSE)
+
+  expect_equal(NROW(res), 0)
+})
+
+test_that("url_check() honors _R_CHECK_URLS_CURL_USER_AGENT_ (#26)", {
+  skip_on_cran()
+
+  web <- local_url_server()
+  bad <- web$url("/needs-browser-ua")
+  db <- local_url_db(bad)
+
+  # A user-set User-Agent wins over the CRAN default; a non-browser one is
+  # rejected (403), proving the env var reaches the request. Disable the
+  # status-ignore list so the 403 is still reported (it is ignored by default).
+  withr::local_envvar(
+    `_R_CHECK_URLS_CURL_USER_AGENT_` = "curl/8",
+    `_R_CHECK_URLS_HTTP_STATUS_IGNORE_REGEXP_` = "^$"
+  )
+  res <- url_check(tempdir(), db = db, progress = FALSE, fail = FALSE)
+
+  expect_equal(NROW(res), 1)
+  expect_equal(res$URL, bad)
+  expect_equal(res$Status, "403")
+})
+
+test_that("url_check() ignores CRAN's ignored HTTP status codes by default", {
+  skip_on_cran()
+
+  web <- local_url_server()
+  # A non-browser User-Agent makes /needs-browser-ua return 403, which CRAN
+  # (and now url_check()) ignores by default, so it must not be flagged.
+  db <- local_url_db(web$url("/needs-browser-ua"))
+
+  withr::local_envvar(`_R_CHECK_URLS_CURL_USER_AGENT_` = "curl/8")
+  res <- url_check(tempdir(), db = db, progress = FALSE, fail = FALSE)
+
+  expect_equal(NROW(res), 0)
+})
+
+test_that("url_check() honors a user-set status-ignore regexp", {
+  skip_on_cran()
+
+  web <- local_url_server()
+  bad <- web$url("/needs-browser-ua")
+  db <- local_url_db(bad)
+
+  # A user-set regexp that does not match 403 wins over the default, so the
+  # 403 is reported again.
+  withr::local_envvar(
+    `_R_CHECK_URLS_CURL_USER_AGENT_` = "curl/8",
+    `_R_CHECK_URLS_HTTP_STATUS_IGNORE_REGEXP_` = "429"
+  )
+  res <- url_check(tempdir(), db = db, progress = FALSE, fail = FALSE)
+
+  expect_equal(NROW(res), 1)
+  expect_equal(res$Status, "403")
+})
+
 test_that("url_check() works serially and in parallel", {
   skip_on_cran()
 

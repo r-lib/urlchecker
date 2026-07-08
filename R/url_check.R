@@ -95,6 +95,18 @@ url_check <- function(
   # requested (#45).
   db <- filter_urlignore(db, read_urlignore(root))
 
+  # Ignore the same HTTP status codes CRAN ignores in its incoming checks
+  # (via `_R_CHECK_URLS_HTTP_STATUS_IGNORE_REGEXP_`), unless already set.
+  if (!nzchar(Sys.getenv("_R_CHECK_URLS_HTTP_STATUS_IGNORE_REGEXP_"))) {
+    Sys.setenv(
+      "_R_CHECK_URLS_HTTP_STATUS_IGNORE_REGEXP_" = cran_status_ignore_regexp
+    )
+    on.exit(
+      Sys.unsetenv("_R_CHECK_URLS_HTTP_STATUS_IGNORE_REGEXP_"),
+      add = TRUE
+    )
+  }
+
   # For github.com rate-limits
   pat <- github_pat()
   if (nzchar(pat) && !nzchar(Sys.getenv("GITHUB_PAT", ""))) {
@@ -131,6 +143,12 @@ url_check <- function(
 # https://github.com/r-devel/r-dev-web/blob/main/CRAN/QA/Kurt/lib/R/Scripts/check_CRAN_incoming.R
 cran_user_agent <-
   "Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0"
+
+# The HTTP status codes CRAN ignores in its incoming URL checks (via
+# `_R_CHECK_URLS_HTTP_STATUS_IGNORE_REGEXP_`): 202 Accepted, 401 Unauthorized,
+# 403 Forbidden, 429 Too Many Requests. Kept in sync with CRAN's check scripts:
+# https://github.com/r-devel/r-dev-web/blob/main/CRAN/QA/Kurt/lib/R/Scripts/check_CRAN_incoming.R
+cran_status_ignore_regexp <- "202|401|403|429"
 
 
 # Build a `url_db` from one or more paths (packages, directories or files),

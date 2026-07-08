@@ -40,6 +40,16 @@ url_app <- function() {
     res$set_header("Location", loc)$set_status(302L)$send("Found")
   })
 
+  # Mimics servers that reject the bare "curl" default User-Agent with 403 but
+  # serve fine for a browser-like UA (#26). Returns 200 only when the request's
+  # User-Agent looks like a browser (contains "Mozilla"), else 403. Handlers run
+  # in a separate process and can't see closures, so the rule is self-contained.
+  app$all("/needs-browser-ua", function(req, res) {
+    ua <- req$get_header("user-agent")
+    ok <- !is.null(ua) && grepl("Mozilla", ua, fixed = TRUE)
+    res$set_status(if (ok) 200L else 403L)$send("")
+  })
+
   app
 }
 

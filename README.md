@@ -76,6 +76,20 @@ https://example.com/behind-a-login
 Note that CRAN's own URL checks do not read `.urlignore`, so an ignored URL may
 still be flagged when the package is submitted to CRAN.
 
+### Environment variables
+
+`url_check()` mirrors CRAN's incoming URL checks, which are controlled by a few
+environment variables. urlchecker uses the same variables and defaults to the
+same values CRAN uses, so results match what CRAN reports. Set a variable
+yourself to override the default.
+
+* `_R_CHECK_URLS_HTTP_STATUS_IGNORE_REGEXP_` — HTTP status codes to treat as
+  OK rather than flag. Defaults to `"202|401|403|429"` (Accepted,
+  Unauthorized, Forbidden, Too Many Requests), matching CRAN.
+
+* `_R_CHECK_URLS_CURL_USER_AGENT_` — the `User-Agent` header sent with each
+  request. Defaults to the browser-like string CRAN uses.
+
 ## Code of Conduct
 
 Please note that the urlchecker project is released with a

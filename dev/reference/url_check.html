@@ -106,6 +106,25 @@ instead of failing.</p></dd>
     <p>A <code>url_checker_db</code> object (invisibly). This is a <code>check_url_db</code> object
 with an added class with a custom print method.</p>
     </div>
+    <div class="section level2">
+    <h2 id="ignoring-urls-with-urlignore">Ignoring URLs with <code>.urlignore</code><a class="anchor" aria-label="anchor" href="#ignoring-urls-with-urlignore"></a></h2>
+
+
+
+<p>Some URLs cannot be checked automatically, e.g. a link to a private
+repository, or a page behind a login or captcha. To stop <code>url_check()</code> from
+flagging (and even requesting) such URLs, list them in a <code>.urlignore</code> file.
+It is read from two locations relative to the checked root, and the patterns
+found are combined:</p><ul><li><p><code>.urlignore</code> in the root directory (like <code>.gitignore</code>), and</p></li>
+<li><p><code>tools/.urlignore</code> (handy for packages that keep it under <code>tools/</code>).</p></li>
+</ul><p>Each non-empty line is a glob pattern (blank lines and lines starting with
+<code>#</code> are ignored), matched against the whole URL. For example
+<code>https://github.com/acme/secret</code> matches that URL exactly, while
+<code>https://github.com/acme/*</code> matches every URL under that path. Matching URLs
+are dropped before checking, so they are never requested.</p>
+<p>Note that CRAN's own URL checks do not read <code>.urlignore</code>, so an ignored URL
+may still be flagged when the package is submitted to CRAN.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

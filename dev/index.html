@@ -91,6 +91,15 @@
 <span><span class="co"># Markdown (`.md`), R Markdown (`.Rmd`) and Quarto (`.qmd`).</span></span>
 <span><span class="fu"><a href="reference/url_check.html">url_check</a></span><span class="op">(</span><span class="st">"path/to/project"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/url_check.html">url_check</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"README.md"</span>, <span class="st">"docs"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<div class="section level3">
+<h3 id="ignoring-urls">Ignoring URLs<a class="anchor" aria-label="anchor" href="#ignoring-urls"></a>
+</h3>
+<p>Some URLs cannot be checked automatically, e.g. a link to a private repository, or a page behind a login or captcha. List them in a <code>.urlignore</code> file (in the project root, or under <code>tools/</code>) to stop <code><a href="reference/url_check.html">url_check()</a></code> from requesting and flagging them. Each line is a glob pattern:</p>
+<pre><code># Ignore everything under our private org, and one specific page.
+https://github.com/acme-private/*
+https://example.com/behind-a-login</code></pre>
+<p>Note that CRAN’s own URL checks do not read <code>.urlignore</code>, so an ignored URL may still be flagged when the package is submitted to CRAN.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>

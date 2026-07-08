@@ -69,6 +69,27 @@ url_check(
 A `url_checker_db` object (invisibly). This is a `check_url_db` object
 with an added class with a custom print method.
 
+## Ignoring URLs with `.urlignore`
+
+Some URLs cannot be checked automatically, e.g. a link to a private
+repository, or a page behind a login or captcha. To stop `url_check()`
+from flagging (and even requesting) such URLs, list them in a
+`.urlignore` file. It is read from two locations relative to the checked
+root, and the patterns found are combined:
+
+- `.urlignore` in the root directory (like `.gitignore`), and
+
+- `tools/.urlignore` (handy for packages that keep it under `tools/`).
+
+Each non-empty line is a glob pattern (blank lines and lines starting
+with `#` are ignored), matched against the whole URL. For example
+`https://github.com/acme/secret` matches that URL exactly, while
+`https://github.com/acme/*` matches every URL under that path. Matching
+URLs are dropped before checking, so they are never requested.
+
+Note that CRAN's own URL checks do not read `.urlignore`, so an ignored
+URL may still be flagged when the package is submitted to CRAN.
+
 ## Examples
 
 ``` r

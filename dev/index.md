@@ -52,6 +52,21 @@ library(urlchecker)
     url_check("path/to/project")
     url_check(c("README.md", "docs"))
 
+### Ignoring URLs
+
+Some URLs cannot be checked automatically, e.g. a link to a private
+repository, or a page behind a login or captcha. List them in a
+`.urlignore` file (in the project root, or under `tools/`) to stop
+[`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
+from requesting and flagging them. Each line is a glob pattern:
+
+    # Ignore everything under our private org, and one specific page.
+    https://github.com/acme-private/*
+    https://example.com/behind-a-login
+
+Note that CRAN’s own URL checks do not read `.urlignore`, so an ignored
+URL may still be flagged when the package is submitted to CRAN.
+
 ## Code of Conduct
 
 Please note that the urlchecker project is released with a [Contributor

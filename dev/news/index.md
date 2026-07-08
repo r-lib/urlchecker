@@ -2,6 +2,13 @@
 
 ## urlchecker (development version)
 
+- [`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
+  now reads an optional `.urlignore` file (from the project root or from
+  `tools/`). URLs matching its glob patterns are skipped and never
+  requested, which is useful for links to private repositories or pages
+  behind a login or captcha
+  ([\#45](https://github.com/r-lib/urlchecker/issues/45)).
+
 - The
   [`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
   report no longer errors when a flagged URL is empty (e.g. a Markdown

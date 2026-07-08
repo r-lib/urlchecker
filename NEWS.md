@@ -1,4 +1,4 @@
-# urlchecker (development version)
+# urlchecker 2.0.0
 
 * `url_check()` now ignores the same HTTP status codes that CRAN ignores in
   its incoming URL checks: 202, 401, 403, and 429. This makes results match

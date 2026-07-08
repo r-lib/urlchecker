@@ -29,9 +29,8 @@ extract_package_tarball <- function(tarball) {
   if (length(dirs) == 1 && file.exists(file.path(dirs, "DESCRIPTION"))) {
     normalizePath(dirs, winslash = "/")
   } else {
-    stop(
-      "Cannot determine package root in extracted tarball, ",
-      "no DESCRIPTION file found"
+    cli::cli_abort(
+      "Cannot determine package root in extracted tarball, no {.file DESCRIPTION} file found."
     )
   }
 }
@@ -47,7 +46,7 @@ with_pandoc_available <- function(code, required = TRUE) {
     pandoc_path <- Sys.getenv("RSTUDIO_PANDOC")
     if (!nzchar(pandoc_path)) {
       if (required) {
-        stop("pandoc is not installed and on the PATH")
+        cli::cli_abort("{.pkg pandoc} is not installed and on the PATH.")
       }
     } else {
       sys_path <- Sys.getenv("PATH")

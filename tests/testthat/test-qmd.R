@@ -32,7 +32,9 @@ test_that("url_db_from_package_qmd_vignettes() is empty when there are no vignet
 })
 
 test_that("urls_from_quarto_qmd_file() errors when quarto is not found", {
-  urls_from_quarto_qmd_file <- asNamespace("urlchecker")$urls_from_quarto_qmd_file
+  urls_from_quarto_qmd_file <- asNamespace(
+    "urlchecker"
+  )$urls_from_quarto_qmd_file
 
   # Pretend quarto is not on the PATH.
   testthat::local_mocked_bindings(
@@ -47,7 +49,9 @@ test_that("urls_from_quarto_qmd_file() errors when quarto is not found", {
 })
 
 test_that("urls_from_quarto_qmd_file() returns nothing when the render fails", {
-  urls_from_quarto_qmd_file <- asNamespace("urlchecker")$urls_from_quarto_qmd_file
+  urls_from_quarto_qmd_file <- asNamespace(
+    "urlchecker"
+  )$urls_from_quarto_qmd_file
 
   qmd <- withr::local_tempfile(fileext = ".qmd")
   writeLines("See <https://example.com>.", qmd)
@@ -59,7 +63,9 @@ test_that("urls_from_quarto_qmd_file() returns nothing when the render fails", {
     .package = "base"
   )
   testthat::local_mocked_bindings(
-    .quarto_html_for_CRAN = function(ifile) list(status = 1L, stdout = character())
+    .quarto_html_for_CRAN = function(ifile) {
+      list(status = 1L, stdout = character())
+    }
   )
 
   expect_equal(urls_from_quarto_qmd_file(qmd), character())

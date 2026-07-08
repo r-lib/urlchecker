@@ -15,7 +15,7 @@ test_that("url_update() rewrites permanently moved URLs in the source", {
   writeLines(c("See here:", moved, "done."), file.path(root, file))
 
   db <- local_url_db(moved, parents = file)
-  res <- url_check(root, db = db, progress = FALSE)
+  res <- url_check(root, db = db, progress = FALSE, fail = FALSE)
 
   expect_snapshot(url_update(root, results = res), transform = scrub_urls)
 
@@ -39,7 +39,7 @@ test_that("url_update() also rewrites README.Rmd when updating README.md", {
   withr::local_dir(root)
 
   db <- local_url_db(moved, parents = "README.md")
-  res <- url_check(root, db = db, progress = FALSE)
+  res <- url_check(root, db = db, progress = FALSE, fail = FALSE)
 
   expect_snapshot(url_update(root, results = res), transform = scrub_urls)
 
@@ -62,7 +62,7 @@ test_that("url_update() leaves plain errors untouched", {
   writeLines(bad, file.path(root, file))
 
   db <- local_url_db(bad, parents = file)
-  res <- url_check(root, db = db, progress = FALSE)
+  res <- url_check(root, db = db, progress = FALSE, fail = FALSE)
 
   expect_snapshot(url_update(root, results = res), transform = scrub_urls)
 

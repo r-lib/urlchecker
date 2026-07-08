@@ -4,7 +4,7 @@
 \alias{url_update}
 \title{Update URLs in a package}
 \usage{
-url_update(path = ".", results = url_check(path))
+url_update(path = ".", results = url_check(path, fail = FALSE))
 }
 \arguments{
 \item{path}{Path to the package}

@@ -20,6 +20,10 @@
 #' @param parallel If `TRUE`, check the URLs in parallel
 #' @param pool A multi handle created by [curl::new_pool()]. If `NULL` use a global pool.
 #' @param progress Whether to show the progress bar for parallel checks
+#' @param fail If `TRUE` (the default), throw an error when one or more URLs
+#'   are flagged, after printing the report. This yields a non-zero exit status,
+#'   which is useful in CI/CD workflows. Set to `FALSE` to return the results
+#'   instead of failing.
 #' @return A `url_checker_db` object (invisibly). This is a `check_url_db` object
 #'   with an added class with a custom print method.
 #' @examples
@@ -33,7 +37,8 @@ url_check <- function(
   db = NULL,
   parallel = TRUE,
   pool = curl::new_pool(),
-  progress = TRUE
+  progress = TRUE,
+  fail = TRUE
 ) {
   opts <- options(timeout = 5)
   on.exit(options(opts), add = TRUE)
@@ -60,6 +65,17 @@ url_check <- function(
     res$root <- root
   }
   class(res) <- c("urlchecker_db", class(res))
+
+  if (fail && NROW(res) > 0) {
+    print(res)
+    n <- NROW(res)
+    # Avoid "Run `rlang::last_trace()`", details are already printed
+    stop(errorCondition(
+      cli::format_error("Found {n} invalid URL{?s}."),
+      class = "urlchecker_error"
+    ))
+  }
+
   res
 }
 

@@ -23,7 +23,7 @@ test_that("print() points at the offending line for a broken URL", {
   writeLines(c("first line", paste("url:", bad)), file.path(root, file))
 
   db <- local_url_db(bad, parents = file)
-  res <- url_check(root, db = db, progress = FALSE)
+  res <- url_check(root, db = db, progress = FALSE, fail = FALSE)
 
   expect_snapshot(print(res), transform = scrub_urls)
 })
@@ -39,7 +39,7 @@ test_that("print() suggests a fix for a moved URL", {
   writeLines(c("see", paste("  ", moved)), file.path(root, file))
 
   db <- local_url_db(moved, parents = file)
-  res <- url_check(root, db = db, progress = FALSE)
+  res <- url_check(root, db = db, progress = FALSE, fail = FALSE)
 
   expect_snapshot(print(res), transform = scrub_urls)
 })

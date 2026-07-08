@@ -1,5 +1,10 @@
 # urlchecker (development version)
 
+* `url_check()` gains a `fail` argument. When `TRUE` (the default) it throws
+  an error after printing the report if any URLs are flagged, yielding a
+  non-zero exit status for CI/CD workflows. Set `fail = FALSE` to return the
+  results instead (#42).
+
 * The `url_check()` report now prints the `file:line:col` location of each
   flagged URL as a clickable hyperlink, so you can jump straight to the
   problem in supporting IDEs and terminals (#23).

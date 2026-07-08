@@ -1,11 +1,11 @@
 url_db_from_package_rmd_vignettes <- function(dir) {
+  dir <- normalizePath(dir, winslash = "/")
   urls <- path <- character()
   docs <- Filter(file.exists, tools::pkgVignettes(dir = dir)$docs)
   # Only Rmd vignettes are rendered with pandoc; qmd vignettes go through quarto
   # in `url_db_from_package_qmd_vignettes()`.
   rfiles <- grep("[.][Rr]md$", docs, value = TRUE)
   for (rfile in rfiles) {
-    # normalizePath() so `rfile` and `dir` use the same separator
     rpath <- asNamespace("tools")$.file_path_relative_to_dir(
       normalizePath(rfile, winslash = "/"),
       dir

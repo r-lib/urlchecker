@@ -1,4 +1,5 @@
 url_db_from_package_bib_files <- function(dir) {
+  dir <- normalizePath(dir, winslash = "/")
   files <- list.files(
     file.path(dir, c("vignettes", "inst")),
     pattern = "[.]bib$",
@@ -8,7 +9,6 @@ url_db_from_package_bib_files <- function(dir) {
   )
   urls <- path <- character()
   for (file in files) {
-    # normalizePath() so `file` and `dir` use the same separator
     rpath <- asNamespace("tools")$.file_path_relative_to_dir(
       normalizePath(file, winslash = "/"),
       dir

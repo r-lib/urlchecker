@@ -51,6 +51,14 @@ test_that("url_update() also rewrites README.Rmd when updating README.md", {
   }
 })
 
+test_that("url_update() validates its arguments", {
+  expect_error(url_update(c("a", "b")), "`path` must be a single string")
+  expect_error(
+    url_update(".", results = 1),
+    "`results` must be a data frame"
+  )
+})
+
 test_that("url_update() leaves plain errors untouched", {
   skip_on_cran()
 

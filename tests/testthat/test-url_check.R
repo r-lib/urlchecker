@@ -240,6 +240,14 @@ test_that("url_check() accepts a mix of files and directories", {
   expect_equal(res$root[[1]], normalizePath(root, winslash = "/"))
 })
 
+test_that("url_check() validates its arguments", {
+  expect_error(url_check(1), "`path` must be a character vector")
+  expect_error(url_check(".", db = 1), "`db` must be a data frame")
+  expect_error(url_check(".", parallel = "yes"), "`parallel` must be")
+  expect_error(url_check(".", progress = NA), "`progress` must be")
+  expect_error(url_check(".", fail = 1), "`fail` must be")
+})
+
 test_that("url_check() works serially and in parallel", {
   skip_on_cran()
 

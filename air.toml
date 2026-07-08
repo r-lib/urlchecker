@@ -1,4 +1,10 @@
 # The embedded copy of R's tools/urltools.R is a verbatim mirror of upstream
 # base R (R-Core formatting). Keep it out of Air so refreshes stay clean diffs.
+# Likewise the rlang standalone files, imported verbatim via
+# usethis::use_standalone("r-lib/rlang", "types-check").
 [format]
-exclude = ["inst/tools/urltools.R"]
+exclude = [
+  "inst/tools/urltools.R",
+  "R/import-standalone-types-check.R",
+  "R/import-standalone-obj-type.R",
+]

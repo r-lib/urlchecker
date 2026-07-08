@@ -22,7 +22,7 @@ Imports:
     cli,
     curl,
     gitcreds,
-    rlang,
+    rlang (>= 1.1.0),
     tools,
     utils,
     xml2

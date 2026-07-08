@@ -2,5 +2,27 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom rlang abort
+#' @importFrom rlang caller_arg
+#' @importFrom rlang caller_env
+#' @importFrom rlang check_bool
+#' @importFrom rlang check_data_frame
+#' @importFrom rlang check_number_decimal
+#' @importFrom rlang check_number_whole
+#' @importFrom rlang check_string
+#' @importFrom rlang is_call
+#' @importFrom rlang is_character
+#' @importFrom rlang is_closure
+#' @importFrom rlang is_environment
+#' @importFrom rlang is_formula
+#' @importFrom rlang is_function
+#' @importFrom rlang is_list
+#' @importFrom rlang is_logical
+#' @importFrom rlang is_missing
+#' @importFrom rlang is_na
+#' @importFrom rlang is_null
+#' @importFrom rlang is_symbol
+#' @importFrom rlang is_vector
+#' @importFrom rlang stop_input_type
 ## usethis namespace: end
 NULL

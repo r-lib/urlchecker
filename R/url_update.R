@@ -12,6 +12,9 @@
 #' }
 #' @export
 url_update <- function(path = ".", results = url_check(path, fail = FALSE)) {
+  check_string(path)
+  check_data_frame(results)
+
   can_update <- vlapply(results[["New"]], nzchar)
   to_update <- results[can_update, ]
   for (row in seq_len(NROW(to_update))) {

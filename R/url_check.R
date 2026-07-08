@@ -42,6 +42,12 @@ url_check <- function(
   progress = TRUE,
   fail = TRUE
 ) {
+  check_character(path)
+  check_data_frame(db, allow_null = TRUE)
+  check_bool(parallel)
+  check_bool(progress)
+  check_bool(fail)
+
   opts <- options(timeout = 5)
   on.exit(options(opts), add = TRUE)
 

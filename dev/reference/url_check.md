@@ -1,7 +1,8 @@
 # Check urls in a package
 
 Runs the `url_db_from_package_source` function in the tools package
-along with a function to check URLs in un-rendered Rmarkdown vignettes.
+along with functions to check URLs in un-rendered Rmarkdown (`.Rmd`) and
+Quarto (`.qmd`) vignettes.
 
 ## Usage
 

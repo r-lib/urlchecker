@@ -26,6 +26,11 @@
   is not installed, as it is needed to render the vignettes for URL
   checking.
 
+- [`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
+  now errors, instead of silently skipping the file, when pandoc (for
+  `.md`/`.Rmd` files) or quarto (for `.qmd` files) is needed to render a
+  file but cannot be found on the `PATH`.
+
 - Handle URL fragments in redirects
   ([\#9](https://github.com/r-lib/urlchecker/issues/9)).
 

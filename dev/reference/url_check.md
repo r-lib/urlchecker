@@ -2,9 +2,9 @@
 
 For an R package, runs the `url_db_from_package_source` function in the
 tools package along with functions to check URLs in un-rendered
-Rmarkdown (`.Rmd`) and Quarto (`.qmd`) vignettes. For non-package
-projects, URLs are extracted from all supported files found in the given
-directories.
+Rmarkdown (`.Rmd`) and Quarto (`.qmd`) vignettes and in BibTeX (`.bib`)
+bibliographies. For non-package projects, URLs are extracted from all
+supported files found in the given directories.
 
 ## Usage
 
@@ -32,8 +32,8 @@ url_check(
 
   - A directory that is not an R package. All supported files found
     within (recursively) are scanned for URLs. Supported files are HTML,
-    PDF, Rd, Markdown (`.md`, `.markdown`), R Markdown (`.Rmd`) and
-    Quarto (`.qmd`).
+    PDF, Rd, Markdown (`.md`, `.markdown`), R Markdown (`.Rmd`), Quarto
+    (`.qmd`) and BibTeX (`.bib`).
 
   - A single file of one of the supported types above.
 

@@ -1,10 +1,11 @@
 # A tiny web app used to test URL checking without hitting the internet.
 #
 # Routes:
-#   GET /ok        -> 200 OK
-#   GET /notfound  -> 404 Not Found
-#   GET /moved     -> 301 permanent redirect to /ok (absolute Location)
-#   GET /found     -> 302 temporary redirect to /ok (absolute Location)
+#   GET  /ok       -> 200 OK
+#   GET  /notfound -> 404 Not Found
+#   GET  /moved    -> 301 permanent redirect to /ok (absolute Location)
+#   GET  /found    -> 302 temporary redirect to /ok (absolute Location)
+#   GET  /getonly  -> 200 OK, but HEAD /getonly -> 404 (see #15)
 url_app <- function() {
   app <- webfakes::new_app()
 
@@ -14,6 +15,16 @@ url_app <- function() {
 
   app$get("/notfound", function(req, res) {
     res$set_status(404L)$send("Not Found")
+  })
+
+  # Some servers 404 (or otherwise fail) a HEAD request but serve the URL fine
+  # on GET. The URL checker should fall back to GET when HEAD fails, so this
+  # URL must not be flagged (#15).
+  app$get("/getonly", function(req, res) {
+    res$send("OK")
+  })
+  app$head("/getonly", function(req, res) {
+    res$set_status(404L)$send("")
   })
 
   # `url_check()` only reports a "New" URL for permanent (301) redirects, and

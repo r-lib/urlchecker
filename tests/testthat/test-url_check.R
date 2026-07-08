@@ -55,6 +55,34 @@ test_that("url_check() errors by default when a URL is flagged", {
   )
 })
 
+test_that("url_check() falls back to GET when HEAD fails (#15)", {
+  skip_on_cran()
+
+  web <- local_url_server()
+  # /getonly serves 200 on GET but 404 on HEAD; the checker should retry with
+  # GET and not flag it. Check both code paths, since only the parallel one is
+  # used by default.
+  db <- local_url_db(web$url("/getonly"))
+
+  serial <- url_check(
+    tempdir(),
+    db = db,
+    parallel = FALSE,
+    progress = FALSE,
+    fail = FALSE
+  )
+  parallel <- url_check(
+    tempdir(),
+    db = db,
+    parallel = TRUE,
+    progress = FALSE,
+    fail = FALSE
+  )
+
+  expect_equal(NROW(serial), 0)
+  expect_equal(NROW(parallel), 0)
+})
+
 test_that("url_check() suggests the new location for a 301 redirect", {
   skip_on_cran()
 

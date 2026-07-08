@@ -3,6 +3,10 @@
 ## urlchecker (development version)
 
 - [`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
+  no longer reports URLs that appear inside code chunks of `.Rmd`
+  vignettes ([\#50](https://github.com/r-lib/urlchecker/issues/50)).
+
+- [`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
   now reads an optional `.urlignore` file (from the project root or from
   `tools/`). URLs matching its glob patterns are skipped and never
   requested, which is useful for links to private repositories or pages

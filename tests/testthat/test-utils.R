@@ -30,6 +30,76 @@ test_that("with_pandoc_available() falls back to RSTUDIO_PANDOC", {
   expect_true(with_pandoc_available(nzchar(Sys.which("pandoc"))))
 })
 
+test_that("check_vignette_builders() errors on missing builder packages", {
+  check_vignette_builders <- asNamespace("urlchecker")$check_vignette_builders
+
+  root <- withr::local_tempdir()
+  writeLines(
+    c(
+      "Package: fake",
+      "Version: 0.0.1",
+      "VignetteBuilder: knitr, thisPackageDoesNotExist"
+    ),
+    file.path(root, "DESCRIPTION")
+  )
+
+  expect_error(
+    suppressMessages(check_vignette_builders(root)),
+    "thisPackageDoesNotExist.*not installed"
+  )
+})
+
+test_that("check_vignette_builders() passes when there is no VignetteBuilder", {
+  check_vignette_builders <- asNamespace("urlchecker")$check_vignette_builders
+
+  root <- withr::local_tempdir()
+  writeLines(
+    c("Package: fake", "Version: 0.0.1"),
+    file.path(root, "DESCRIPTION")
+  )
+
+  expect_silent(check_vignette_builders(root))
+})
+
+test_that("check_vignette_builders() passes for installed builders", {
+  check_vignette_builders <- asNamespace("urlchecker")$check_vignette_builders
+
+  root <- withr::local_tempdir()
+  writeLines(
+    c("Package: fake", "Version: 0.0.1", "VignetteBuilder: tools"),
+    file.path(root, "DESCRIPTION")
+  )
+
+  expect_message(
+    expect_message(
+      check_vignette_builders(root),
+      "Checking that VignetteBuilder"
+    ),
+    "installed"
+  )
+})
+
+test_that("check_vignette_builders() skips built packages (inst/doc exists)", {
+  check_vignette_builders <- asNamespace("urlchecker")$check_vignette_builders
+
+  root <- withr::local_tempdir()
+  writeLines(
+    c(
+      "Package: fake",
+      "Version: 0.0.1",
+      "VignetteBuilder: thisPackageDoesNotExist"
+    ),
+    file.path(root, "DESCRIPTION")
+  )
+  # Built vignettes live under inst/doc, so no builder is needed.
+  dir.create(file.path(root, "inst", "doc"), recursive = TRUE)
+
+  expect_message(
+    check_vignette_builders(root),
+    "Built vignettes found"
+  )
+})
+
 test_that("update_urltools() writes the fetched source into inst/tools", {
   update_urltools <- asNamespace("urlchecker")$update_urltools
 

@@ -56,7 +56,7 @@ test_that("url_check() extracts URLs from the package when db is NULL", {
   # problems.
   root <- local_pkg(desc_url = ok, vignette_url = ok)
 
-  res <- url_check(root, progress = FALSE)
+  res <- suppressMessages(url_check(root, progress = FALSE))
 
   expect_s3_class(res, "urlchecker_db")
   expect_equal(NROW(res), 0)
@@ -76,7 +76,7 @@ test_that("url_check() unpacks and checks a source package tarball", {
   root <- local_pkg(desc_url = ok, vignette_url = bad)
   tarball <- local_package_tarball(root)
 
-  res <- url_check(tarball, progress = FALSE)
+  res <- suppressMessages(url_check(tarball, progress = FALSE))
 
   expect_s3_class(res, "urlchecker_db")
   expect_equal(res$URL, bad)

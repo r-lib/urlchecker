@@ -36,6 +36,7 @@ url_check <- function(
   }
 
   if (is.null(db)) {
+    check_vignette_builders(path)
     db <- with_pandoc_available(
       rbind(
         tools$url_db_from_package_sources(path),

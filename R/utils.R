@@ -50,6 +50,49 @@ with_pandoc_available <- function(code) {
 }
 
 
+# Error if a VignetteBuilder package is not installed. We need it to
+# render the un-built vignettes in `vignettes/` to extract their URLs. A
+# built package already has them under `inst/doc`, so skip the check then.
+check_vignette_builders <- function(path) {
+  if (dir.exists(file.path(path, "inst", "doc"))) {
+    cli::cli_alert_info(
+      "Built vignettes found in {.path inst/doc}, using those; \\
+       no VignetteBuilder needed."
+    )
+    return(invisible())
+  }
+  desc <- file.path(path, "DESCRIPTION")
+  if (!file.exists(desc)) {
+    return(invisible())
+  }
+  builders <- read.dcf(desc, fields = "VignetteBuilder")[1, 1]
+  if (is.na(builders)) {
+    return(invisible())
+  }
+  builders <- trimws(strsplit(builders, ",")[[1]])
+  builders <- builders[nzchar(builders)]
+
+  cli::cli_alert_info(
+    "Checking that VignetteBuilder package{?s} {.pkg {builders}} \\
+     {?is/are} installed."
+  )
+  # `system.file()` checks for the package without loading it.
+  missing <- builders[!vlapply(builders, function(p) {
+    nzchar(system.file(package = p))
+  })]
+  if (length(missing)) {
+    cli::cli_abort(c(
+      "VignetteBuilder package{?s} {.pkg {missing}} {?is/are} not installed.",
+      "i" = "{cli::qty(missing)}Install {?it/them} to check URLs in vignettes."
+    ))
+  }
+  cli::cli_alert_success(
+    "VignetteBuilder package{?s} {.pkg {builders}} {?is/are} installed."
+  )
+  invisible()
+}
+
+
 update_urltools <- function() {
   lines <- readLines(
     "https://raw.githubusercontent.com/wch/r-source/trunk/src/library/tools/R/urltools.R"

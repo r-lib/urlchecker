@@ -1,5 +1,10 @@
 # urlchecker (development version)
 
+* `url_check()` now reads an optional `.urlignore` file (from the project
+  root or from `tools/`). URLs matching its glob patterns are skipped and
+  never requested, which is useful for links to private repositories or
+  pages behind a login or captcha (#45).
+
 * The `url_check()` report no longer errors when a flagged URL is empty
   (e.g. a Markdown `[]()` link); the empty URL is now reported without a
   source-line pointer (#47).

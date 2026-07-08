@@ -53,6 +53,29 @@ tools package along with functions to check URLs in un-rendered Rmarkdown
 For non-package projects, URLs are extracted from all supported files found
 in the given directories.
 }
+\section{Ignoring URLs with \code{.urlignore}}{
+
+
+Some URLs cannot be checked automatically, e.g. a link to a private
+repository, or a page behind a login or captcha. To stop \code{url_check()} from
+flagging (and even requesting) such URLs, list them in a \code{.urlignore} file.
+It is read from two locations relative to the checked root, and the patterns
+found are combined:
+\itemize{
+\item \code{.urlignore} in the root directory (like \code{.gitignore}), and
+\item \code{tools/.urlignore} (handy for packages that keep it under \verb{tools/}).
+}
+
+Each non-empty line is a glob pattern (blank lines and lines starting with
+\verb{#} are ignored), matched against the whole URL. For example
+\verb{https://github.com/acme/secret} matches that URL exactly, while
+\verb{https://github.com/acme/*} matches every URL under that path. Matching URLs
+are dropped before checking, so they are never requested.
+
+Note that CRAN's own URL checks do not read \code{.urlignore}, so an ignored URL
+may still be flagged when the package is submitted to CRAN.
+}
+
 \examples{
 \dontrun{
 url_check("my_pkg")

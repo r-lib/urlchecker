@@ -6,6 +6,26 @@
 #' For non-package projects, URLs are extracted from all supported files found
 #' in the given directories.
 #'
+#' @section Ignoring URLs with `.urlignore`:
+#'
+#' Some URLs cannot be checked automatically, e.g. a link to a private
+#' repository, or a page behind a login or captcha. To stop `url_check()` from
+#' flagging (and even requesting) such URLs, list them in a `.urlignore` file.
+#' It is read from two locations relative to the checked root, and the patterns
+#' found are combined:
+#'
+#' * `.urlignore` in the root directory (like `.gitignore`), and
+#' * `tools/.urlignore` (handy for packages that keep it under `tools/`).
+#'
+#' Each non-empty line is a glob pattern (blank lines and lines starting with
+#' `#` are ignored), matched against the whole URL. For example
+#' `https://github.com/acme/secret` matches that URL exactly, while
+#' `https://github.com/acme/*` matches every URL under that path. Matching URLs
+#' are dropped before checking, so they are never requested.
+#'
+#' Note that CRAN's own URL checks do not read `.urlignore`, so an ignored URL
+#' may still be flagged when the package is submitted to CRAN.
+#'
 #' @param path Path(s) to check. Each element may be:
 #'   * A package's (development) source directory tree, a directory holding an
 #'     unpacked source package, or a source package tarball (`.tar.gz`). A
@@ -70,6 +90,10 @@ url_check <- function(
   } else {
     root <- normalizePath(path, winslash = "/", mustWork = TRUE)
   }
+
+  # Drop URLs matching the project's `.urlignore` file(s), so they are never
+  # requested (#45).
+  db <- filter_urlignore(db, read_urlignore(root))
 
   # For github.com rate-limits
   pat <- github_pat()

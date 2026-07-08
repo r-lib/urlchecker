@@ -3,6 +3,13 @@
 ## urlchecker (development version)
 
 - [`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
+  now finds a GitHub token in the git credential store (via gitcreds, as
+  configured by usethis or gh), in addition to the `GITHUB_PAT`
+  environment variable. This lets checks of `github.com` URLs avoid the
+  `429: Too Many Requests` errors that anonymous requests hit
+  ([\#28](https://github.com/r-lib/urlchecker/issues/28)).
+
+- [`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
   gains a `fail` argument. When `TRUE` (the default) it throws an error
   after printing the report if any URLs are flagged, yielding a non-zero
   exit status for CI/CD workflows. Set `fail = FALSE` to return the

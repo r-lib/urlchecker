@@ -62,6 +62,40 @@ test_that("url_check() extracts URLs from the package when db is NULL", {
   expect_equal(NROW(res), 0)
 })
 
+test_that("url_check() unpacks and checks a source package tarball", {
+  skip_on_cran()
+  skip_if_not(nzchar(Sys.which("pandoc")), "pandoc is not available")
+  skip_if_not_installed("knitr")
+
+  web <- local_url_server()
+  ok <- web$url("/ok")
+  bad <- web$url("/notfound")
+
+  # The DESCRIPTION URL is fine; the vignette URL is broken, so the check on the
+  # unpacked tarball should report exactly the vignette URL.
+  root <- local_pkg(desc_url = ok, vignette_url = bad)
+  tarball <- local_package_tarball(root)
+
+  res <- url_check(tarball, progress = FALSE)
+
+  expect_s3_class(res, "urlchecker_db")
+  expect_equal(res$URL, bad)
+  # `root` points into the extracted sources, so the sources are still readable.
+  expect_true(file.exists(file.path(res$root[[1]], "DESCRIPTION")))
+})
+
+test_that("url_check() errors on a tarball that is not a package", {
+  # A tarball with a single top-level directory but no DESCRIPTION.
+  dir <- withr::local_tempdir()
+  notpkg <- file.path(dir, "notpkg")
+  dir.create(notpkg)
+  writeLines("nothing to see here", file.path(notpkg, "hello.txt"))
+  tarball <- file.path(dir, "notpkg.tar.gz")
+  withr::with_dir(dir, utils::tar(tarball, "notpkg", compression = "gzip"))
+
+  expect_snapshot(url_check(tarball), error = TRUE)
+})
+
 test_that("url_check() works serially and in parallel", {
   skip_on_cran()
 

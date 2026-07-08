@@ -1,5 +1,35 @@
 vlapply <- function(x, f, ...) vapply(x, f, logical(1))
 
+# TRUE if `path` looks like a source package tarball (a `.tar.gz` file).
+is_package_tarball <- function(path) {
+  !dir.exists(path) &&
+    file.exists(path) &&
+    grepl("\\.tar\\.gz$", path, ignore.case = TRUE)
+}
+
+# Unpack a source package tarball into a fresh temporary directory and return
+# the path to the package root inside it. A source tarball holds the package in
+# a single top-level directory (named after the package); we return that
+# directory. The temp directory lives for the rest of the R session so callers
+# (notably the `print.urlchecker_db` method) can still read the sources after
+# `url_check()` has returned.
+extract_package_tarball <- function(tarball) {
+  exdir <- tempfile("urlchecker-")
+  dir.create(exdir)
+  utils::untar(tarball, exdir = exdir)
+
+  contents <- list.files(exdir, full.names = TRUE)
+  dirs <- contents[dir.exists(contents)]
+  if (length(dirs) == 1 && file.exists(file.path(dirs, "DESCRIPTION"))) {
+    normalizePath(dirs)
+  } else {
+    stop(
+      "Cannot determine package root in extracted tarball, ",
+      "no DESCRIPTION file found"
+    )
+  }
+}
+
 # makes sure that pandoc is available
 # puts RStudio's pandoc on the PATH if it is the only one available
 with_pandoc_available <- function(code) {

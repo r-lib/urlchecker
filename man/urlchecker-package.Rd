@@ -22,13 +22,14 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Gábor Csárdi \email{csardi.gabor@gmail.com}
   \item R Core team (The code in urltools.R adapted from the tools package)
   \item Jim Hester (\href{https://orcid.org/0000-0002-2739-7082}{ORCID})
 }
 
 Other contributors:
 \itemize{
-  \item RStudio [copyright holder, funder]
+  \item Posit Software, PBC (\href{https://ror.org/03wc8by49}{ROR}) [copyright holder, funder]
 }
 
 }

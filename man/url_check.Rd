@@ -13,13 +13,18 @@ url_check(
 )
 }
 \arguments{
-\item{path}{Path to the package}
+\item{path}{Path to the package. Most commonly this is a package's
+(development) source directory tree, but it may also be a directory
+holding an unpacked source package, or the path to a source package
+tarball (\code{.tar.gz}). A tarball is unpacked into a temporary directory
+(kept for the rest of the session, so the printed report can point
+into the sources).}
 
 \item{db}{A url database}
 
 \item{parallel}{If \code{TRUE}, check the URLs in parallel}
 
-\item{pool}{A multi handle created by \code{\link[curl:multi]{curl::new_pool()}}. If \code{NULL} use a global pool.}
+\item{pool}{A multi handle created by \code{\link[curl:new_pool]{curl::new_pool()}}. If \code{NULL} use a global pool.}
 
 \item{progress}{Whether to show the progress bar for parallel checks}
 }

@@ -101,3 +101,19 @@ local_pkg <- function(
 
   root
 }
+
+# Build a source package tarball (`<pkg>_<version>.tar.gz`) from an unpacked
+# package directory (e.g. one from `local_pkg()`), mirroring the single
+# top-level directory layout of a real source tarball. Returns the tarball path,
+# cleaned up when `.local_envir` finishes.
+local_package_tarball <- function(root, .local_envir = parent.frame()) {
+  dir <- withr::local_tempdir(.local_envir = .local_envir)
+  pkg <- basename(root)
+  tarball <- file.path(dir, paste0(pkg, ".tar.gz"))
+  # Tar with the package directory as the single top-level entry.
+  withr::with_dir(
+    dirname(root),
+    utils::tar(tarball, files = pkg, compression = "gzip")
+  )
+  normalizePath(tarball)
+}

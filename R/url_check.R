@@ -3,7 +3,12 @@
 #' Runs the `url_db_from_package_source` function in the tools package along
 #' with a function to check URLs in un-rendered Rmarkdown vignettes.
 #'
-#' @param path Path to the package
+#' @param path Path to the package. Most commonly this is a package's
+#'   (development) source directory tree, but it may also be a directory
+#'   holding an unpacked source package, or the path to a source package
+#'   tarball (`.tar.gz`). A tarball is unpacked into a temporary directory
+#'   (kept for the rest of the session, so the printed report can point
+#'   into the sources).
 #' @param db A url database
 #' @param parallel If `TRUE`, check the URLs in parallel
 #' @param pool A multi handle created by [curl::new_pool()]. If `NULL` use a global pool.
@@ -23,13 +28,18 @@ url_check <- function(
   progress = TRUE
 ) {
   opts <- options(timeout = 5)
-  on.exit(options(opts))
+  on.exit(options(opts), add = TRUE)
+
+  path <- normalizePath(path, mustWork = TRUE)
+  if (is_package_tarball(path)) {
+    path <- extract_package_tarball(path)
+  }
 
   if (is.null(db)) {
     db <- with_pandoc_available(
       rbind(
-        tools$url_db_from_package_sources(normalizePath(path)),
-        url_db_from_package_rmd_vignettes(normalizePath(path))
+        tools$url_db_from_package_sources(path),
+        url_db_from_package_rmd_vignettes(path)
       )
     )
   }
@@ -41,7 +51,7 @@ url_check <- function(
     verbose = progress
   )
   if (NROW(res) > 0) {
-    res$root <- normalizePath(path)
+    res$root <- path
   }
   class(res) <- c("urlchecker_db", class(res))
   res

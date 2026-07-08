@@ -36,10 +36,17 @@ url_check("path/to/pkg")
 # `url_update()` will check all URLs in a package, then update any 301
 # redirects automatically to their new location.
 url_update("path/to/pkg")
+
+# You can also point `url_check()` at a built source package tarball. It is
+# unpacked into a temporary directory and checked from there. Because the
+# tarball contains the rendered vignettes, this also checks URLs in the
+# built vignettes.
+tarball <- pkgbuild::build("path/to/pkg")
+url_check(tarball)
 ```
 
 ## Code of Conduct
 
-Please note that the urlchecker project is released with a 
-[Contributor Code of Conduct](https://r-lib.github.io/urlchecker/CODE_OF_CONDUCT.html).
+Please note that the urlchecker project is released with a
+[Contributor Code of Conduct](https://urlchecker.r-lib.org/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.

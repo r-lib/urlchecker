@@ -105,6 +105,21 @@ check_vignette_builders <- function(path) {
 }
 
 
+github_pat <- function() {
+  pat <- Sys.getenv("GITHUB_PAT", "")
+  if (nzchar(pat)) {
+    return(pat)
+  }
+  tryCatch(
+    {
+      creds <- gitcreds::gitcreds_get("https://github.com")
+      if (is.null(creds$password)) "" else creds$password
+    },
+    error = function(e) ""
+  )
+}
+
+
 update_urltools <- function() {
   lines <- readLines(
     "https://raw.githubusercontent.com/wch/r-source/trunk/src/library/tools/R/urltools.R"

@@ -55,6 +55,13 @@ url_check <- function(
     root <- normalizePath(path, winslash = "/", mustWork = TRUE)
   }
 
+  # For github.com rate-limits
+  pat <- github_pat()
+  if (nzchar(pat) && !nzchar(Sys.getenv("GITHUB_PAT", ""))) {
+    Sys.setenv(GITHUB_PAT = pat)
+    on.exit(Sys.unsetenv("GITHUB_PAT"), add = TRUE)
+  }
+
   res <- tools$check_url_db(
     db,
     parallel = parallel,

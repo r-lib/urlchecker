@@ -108,6 +108,43 @@ test_that("check_vignette_builders() skips built packages (inst/doc exists)", {
   )
 })
 
+test_that("github_pat() prefers the GITHUB_PAT environment variable", {
+  github_pat <- asNamespace("urlchecker")$github_pat
+
+  withr::local_envvar(GITHUB_PAT = "from-env")
+  # gitcreds must not be consulted when the env var is set.
+  testthat::local_mocked_bindings(
+    gitcreds_get = function(...) stop("should not be called"),
+    .package = "gitcreds"
+  )
+
+  expect_equal(github_pat(), "from-env")
+})
+
+test_that("github_pat() falls back to the git credential store", {
+  github_pat <- asNamespace("urlchecker")$github_pat
+
+  withr::local_envvar(GITHUB_PAT = NA)
+  testthat::local_mocked_bindings(
+    gitcreds_get = function(...) list(password = "from-gitcreds"),
+    .package = "gitcreds"
+  )
+
+  expect_equal(github_pat(), "from-gitcreds")
+})
+
+test_that("github_pat() returns '' when no token is available", {
+  github_pat <- asNamespace("urlchecker")$github_pat
+
+  withr::local_envvar(GITHUB_PAT = NA)
+  testthat::local_mocked_bindings(
+    gitcreds_get = function(...) stop("no credentials"),
+    .package = "gitcreds"
+  )
+
+  expect_equal(github_pat(), "")
+})
+
 test_that("update_urltools() writes the fetched source into inst/tools", {
   update_urltools <- asNamespace("urlchecker")$update_urltools
 

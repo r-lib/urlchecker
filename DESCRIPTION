@@ -21,6 +21,7 @@ Depends:
 Imports:
     cli,
     curl,
+    gitcreds,
     rlang,
     tools,
     utils,

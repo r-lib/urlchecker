@@ -14,7 +14,8 @@ supported_extensions <- c(
   "md",
   "markdown",
   "rmd",
-  "qmd"
+  "qmd",
+  "bib"
 )
 
 # TRUE if `path` is a directory holding an R package (i.e. has a DESCRIPTION).
@@ -37,6 +38,7 @@ urls_from_file <- function(file) {
     "markdown" = ,
     "rmd" = urls_from_pandoc_md_file(file),
     "qmd" = urls_from_quarto_qmd_file(file),
+    "bib" = urls_from_bib_file(file),
     character()
   )
 }

@@ -1,5 +1,7 @@
 # urlchecker (development version)
 
+* `url_check()` now checks URLs in BibTeX (`.bib`) bibliography files (#13).
+
 * `url_check()` now finds a GitHub token in the git credential store (via
   gitcreds, as configured by usethis or gh), in addition to the `GITHUB_PAT`
   environment variable. This lets checks of `github.com` URLs avoid the

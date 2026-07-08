@@ -22,7 +22,8 @@ tarball is unpacked into a temporary directory (kept for the rest of the
 session, so the printed report can point into the sources).
 \item A directory that is not an R package. All supported files found within
 (recursively) are scanned for URLs. Supported files are HTML, PDF, Rd,
-Markdown (\code{.md}, \code{.markdown}), R Markdown (\code{.Rmd}) and Quarto (\code{.qmd}).
+Markdown (\code{.md}, \code{.markdown}), R Markdown (\code{.Rmd}), Quarto (\code{.qmd}) and
+BibTeX (\code{.bib}).
 \item A single file of one of the supported types above.
 }
 
@@ -48,8 +49,9 @@ with an added class with a custom print method.
 \description{
 For an R package, runs the \code{url_db_from_package_source} function in the
 tools package along with functions to check URLs in un-rendered Rmarkdown
-(\code{.Rmd}) and Quarto (\code{.qmd}) vignettes. For non-package projects, URLs are
-extracted from all supported files found in the given directories.
+(\code{.Rmd}) and Quarto (\code{.qmd}) vignettes and in BibTeX (\code{.bib}) bibliographies.
+For non-package projects, URLs are extracted from all supported files found
+in the given directories.
 }
 \examples{
 \dontrun{

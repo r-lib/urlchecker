@@ -2,8 +2,9 @@
 #'
 #' For an R package, runs the `url_db_from_package_source` function in the
 #' tools package along with functions to check URLs in un-rendered Rmarkdown
-#' (`.Rmd`) and Quarto (`.qmd`) vignettes. For non-package projects, URLs are
-#' extracted from all supported files found in the given directories.
+#' (`.Rmd`) and Quarto (`.qmd`) vignettes and in BibTeX (`.bib`) bibliographies.
+#' For non-package projects, URLs are extracted from all supported files found
+#' in the given directories.
 #'
 #' @param path Path(s) to check. Each element may be:
 #'   * A package's (development) source directory tree, a directory holding an
@@ -12,7 +13,8 @@
 #'     session, so the printed report can point into the sources).
 #'   * A directory that is not an R package. All supported files found within
 #'     (recursively) are scanned for URLs. Supported files are HTML, PDF, Rd,
-#'     Markdown (`.md`, `.markdown`), R Markdown (`.Rmd`) and Quarto (`.qmd`).
+#'     Markdown (`.md`, `.markdown`), R Markdown (`.Rmd`), Quarto (`.qmd`) and
+#'     BibTeX (`.bib`).
 #'   * A single file of one of the supported types above.
 #'
 #'   `path` may be a character vector mixing any of these.
@@ -139,7 +141,8 @@ package_url_db <- function(dir) {
   db <- rbind(
     tools$url_db_from_package_sources(dir),
     url_db_from_package_rmd_vignettes(dir),
-    url_db_from_package_qmd_vignettes(dir)
+    url_db_from_package_qmd_vignettes(dir),
+    url_db_from_package_bib_files(dir)
   )
   if (NROW(db)) {
     db$Parent <- file.path(dir, db$Parent)

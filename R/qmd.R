@@ -7,7 +7,7 @@ url_db_from_package_qmd_vignettes <- function(dir) {
   for (qfile in qfiles) {
     # normalizePath() so `qfile` and `dir` use the same separator
     qpath <- asNamespace("tools")$.file_path_relative_to_dir(
-      normalizePath(qfile),
+      normalizePath(qfile, winslash = "/"),
       dir
     )
     qurls <- urls_from_quarto_qmd_file(qfile)

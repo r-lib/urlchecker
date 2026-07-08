@@ -39,7 +39,7 @@ url_check <- function(
   on.exit(options(opts), add = TRUE)
 
   if (is.null(db)) {
-    path <- normalizePath(path, mustWork = TRUE)
+    path <- normalizePath(path, winslash = "/", mustWork = TRUE)
     required <- any(vlapply(
       path,
       function(p) is_package_tarball(p) || is_package_dir(p)
@@ -47,7 +47,7 @@ url_check <- function(
     db <- with_pandoc_available(build_url_db(path), required = required)
     root <- attr(db, "root")
   } else {
-    root <- normalizePath(path, mustWork = TRUE)
+    root <- normalizePath(path, winslash = "/", mustWork = TRUE)
   }
 
   res <- tools$check_url_db(

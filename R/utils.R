@@ -27,7 +27,7 @@ extract_package_tarball <- function(tarball) {
   contents <- list.files(exdir, full.names = TRUE)
   dirs <- contents[dir.exists(contents)]
   if (length(dirs) == 1 && file.exists(file.path(dirs, "DESCRIPTION"))) {
-    normalizePath(dirs)
+    normalizePath(dirs, winslash = "/")
   } else {
     stop(
       "Cannot determine package root in extracted tarball, ",

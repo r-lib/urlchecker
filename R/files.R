@@ -44,7 +44,7 @@ urls_from_file <- function(file) {
 # Build a `url_db` from a single file. The `Parent` is the absolute file path;
 # `url_check()` rebases parents to a common root for display.
 url_db_from_file <- function(file) {
-  file <- normalizePath(file, mustWork = TRUE)
+  file <- normalizePath(file, winslash = "/", mustWork = TRUE)
   urls <- urls_from_file(file)
   tools$url_db(urls, rep.int(file, length(urls)))
 }
@@ -53,7 +53,7 @@ url_db_from_file <- function(file) {
 # that is not an R package. Hidden directories (e.g. `.git`) are skipped by
 # `list.files()`'s default `all.files = FALSE`. Parents are absolute paths.
 url_db_from_dir <- function(dir) {
-  dir <- normalizePath(dir, mustWork = TRUE)
+  dir <- normalizePath(dir, winslash = "/", mustWork = TRUE)
   pattern <- paste0(
     "[.](",
     paste(supported_extensions, collapse = "|"),

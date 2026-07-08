@@ -7,7 +7,7 @@ url_db_from_package_rmd_vignettes <- function(dir) {
   for (rfile in rfiles) {
     # normalizePath() so `rfile` and `dir` use the same separator
     rpath <- asNamespace("tools")$.file_path_relative_to_dir(
-      normalizePath(rfile),
+      normalizePath(rfile, winslash = "/"),
       dir
     )
     rurls <- urls_from_pandoc_md_file(rfile)

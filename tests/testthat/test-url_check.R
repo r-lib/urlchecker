@@ -99,7 +99,7 @@ test_that("url_check() errors on a tarball that is not a package", {
     url_check(tarball),
     error = TRUE,
     transform = function(x) {
-      gsub("Tarball '.*/(notpkg.tar.gz)'", "Tarball '\\1'", x)
+      gsub("Tarball '.*[/\\\\](notpkg.tar.gz)'", "Tarball '\\1'", x)
     }
   )
 })
@@ -150,7 +150,7 @@ test_that("url_check() checks a single file", {
   expect_equal(res$URL, bad)
   # The single-file root is the file's directory, so `From` is the basename.
   expect_equal(res$From[[1]], "page.html")
-  expect_equal(res$root[[1]], normalizePath(root))
+  expect_equal(res$root[[1]], normalizePath(root, winslash = "/"))
 })
 
 test_that("url_check() accepts a mix of files and directories", {
@@ -179,7 +179,7 @@ test_that("url_check() accepts a mix of files and directories", {
   # root directory.
   expect_equal(res$URL, bad1)
   expect_setequal(res$From[[1]], c("loose.html", "docs/nested.html"))
-  expect_equal(res$root[[1]], normalizePath(root))
+  expect_equal(res$root[[1]], normalizePath(root, winslash = "/"))
 })
 
 test_that("url_check() works serially and in parallel", {

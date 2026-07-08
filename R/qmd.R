@@ -5,7 +5,11 @@ url_db_from_package_qmd_vignettes <- function(dir) {
   # in `url_db_from_package_rmd_vignettes()`.
   qfiles <- grep("[.]qmd$", docs, value = TRUE)
   for (qfile in qfiles) {
-    qpath <- asNamespace("tools")$.file_path_relative_to_dir(qfile, dir)
+    # normalizePath() so `qfile` and `dir` use the same separator
+    qpath <- asNamespace("tools")$.file_path_relative_to_dir(
+      normalizePath(qfile),
+      dir
+    )
     qurls <- urls_from_quarto_qmd_file(qfile)
     urls <- c(urls, qurls)
     path <- c(path, rep.int(qpath, length(qurls)))

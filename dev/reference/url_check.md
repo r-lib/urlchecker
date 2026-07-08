@@ -19,7 +19,12 @@ url_check(
 
 - path:
 
-  Path to the package
+  Path to the package. Most commonly this is a package's (development)
+  source directory tree, but it may also be a directory holding an
+  unpacked source package, or the path to a source package tarball
+  (`.tar.gz`). A tarball is unpacked into a temporary directory (kept
+  for the rest of the session, so the printed report can point into the
+  sources).
 
 - db:
 

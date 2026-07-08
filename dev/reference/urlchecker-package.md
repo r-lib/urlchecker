@@ -20,10 +20,13 @@ Useful links:
 
 Authors:
 
+- Gábor Csárdi <csardi.gabor@gmail.com>
+
 - R Core team (The code in urltools.R adapted from the tools package)
 
 - Jim Hester ([ORCID](https://orcid.org/0000-0002-2739-7082))
 
 Other contributors:
 
-- RStudio \[copyright holder, funder\]
+- Posit Software, PBC ([ROR](https://ror.org/03wc8by49)) \[copyright
+  holder, funder\]

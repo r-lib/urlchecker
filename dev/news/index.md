@@ -5,6 +5,10 @@
 - Handle URL fragments in redirects
   ([\#9](https://github.com/r-lib/urlchecker/issues/9)).
 
+- [`url_check()`](https://urlchecker.r-lib.org/dev/reference/url_check.md)
+  now also handles package tarballs. This is useful to check the URL in
+  the package vignettes.
+
 ## urlchecker 1.0.1
 
 CRAN release: 2021-11-30

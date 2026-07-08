@@ -65,9 +65,11 @@ This is the main recurring task (see
 
 ## Dev workflow
 
-- Load: `uncovr::reload()` (not
+- Load: [`uncovr::reload()`](https://rdrr.io/pkg/uncovr/man/reload.html)
+  (not
   [`pkgload::load_all()`](https://pkgload.r-lib.org/reference/load_all.html)).
-- Tests: `uncovr::test()`. The suite lives in
+- Tests: [`uncovr::test()`](https://rdrr.io/pkg/uncovr/man/test.html).
+  The suite lives in
   [tests/testthat/](https://urlchecker.r-lib.org/dev/tests/testthat/)
   and uses testthat 3e. It avoids the network by running a local
   `webfakes` app
@@ -79,11 +81,11 @@ This is the main recurring task (see
   random ports and pointer tildes). Snapshots are in
   [tests/testthat/\_snaps/](https://urlchecker.r-lib.org/dev/tests/testthat/_snaps/).
 - Real verification: run the actual pipeline, e.g.
-  `uncovr::reload(); print(urlchecker::url_check("."))`. This needs
-  pandoc on PATH and network access; it exercises URL extraction +
-  parallel curl checks + the custom printer. A missing internal `tools`
-  function shows up here as a `could not find function` error (→
-  backport).
+  [`uncovr::reload(); print(urlchecker::url_check("."))`](https://rdrr.io/pkg/uncovr/man/reload.html).
+  This needs pandoc on PATH and network access; it exercises URL
+  extraction + parallel curl checks + the custom printer. A missing
+  internal `tools` function shows up here as a `could not find function`
+  error (→ backport).
 - Formatting: `air format .` (uses
   [air.toml](https://urlchecker.r-lib.org/dev/air.toml); leaves
   `urltools.R` untouched).

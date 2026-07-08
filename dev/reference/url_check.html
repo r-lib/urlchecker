@@ -56,7 +56,12 @@ with a function to check URLs in un-rendered Rmarkdown vignettes.</p>
 
 
 <dl><dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
-<dd><p>Path to the package</p></dd>
+<dd><p>Path to the package. Most commonly this is a package's
+(development) source directory tree, but it may also be a directory
+holding an unpacked source package, or the path to a source package
+tarball (<code>.tar.gz</code>). A tarball is unpacked into a temporary directory
+(kept for the rest of the session, so the printed report can point
+into the sources).</p></dd>
 
 
 <dt id="arg-db">db<a class="anchor" aria-label="anchor" href="#arg-db"></a></dt>
@@ -99,7 +104,7 @@ with an added class with a custom print method.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
   </div></footer></body></html>

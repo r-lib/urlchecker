@@ -1,9 +1,8 @@
-pandoc: 2.14.2
-pkgdown: 2.0.2
+pandoc: 3.8.3
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles: {}
-last_built: 2022-03-14T10:11Z
+last_built: 2026-07-09T06:08Z
 urls:
-  reference: https://r-lib.github.io/urlchecker/reference
-  article: https://r-lib.github.io/urlchecker/articles
-
+  reference: https://urlchecker.r-lib.org/reference
+  article: https://urlchecker.r-lib.org/articles

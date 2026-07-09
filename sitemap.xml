@@ -1,33 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://r-lib.github.io/urlchecker/404.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/urlchecker/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/urlchecker/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/urlchecker/MAINTENANCE.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/urlchecker/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/urlchecker/index.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/urlchecker/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/urlchecker/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/urlchecker/reference/url_check.html</loc>
-  </url>
-  <url>
-    <loc>https://r-lib.github.io/urlchecker/reference/url_update.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://urlchecker.r-lib.org/404.html</loc></url>
+<url><loc>https://urlchecker.r-lib.org/CLAUDE.html</loc></url>
+<url><loc>https://urlchecker.r-lib.org/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>https://urlchecker.r-lib.org/LICENSE.html</loc></url>
+<url><loc>https://urlchecker.r-lib.org/MAINTENANCE.html</loc></url>
+<url><loc>https://urlchecker.r-lib.org/authors.html</loc></url>
+<url><loc>https://urlchecker.r-lib.org/index.html</loc></url>
+<url><loc>https://urlchecker.r-lib.org/news/index.html</loc></url>
+<url><loc>https://urlchecker.r-lib.org/reference/index.html</loc></url>
+<url><loc>https://urlchecker.r-lib.org/reference/url_check.html</loc></url>
+<url><loc>https://urlchecker.r-lib.org/reference/url_update.html</loc></url>
+<url><loc>https://urlchecker.r-lib.org/reference/urlchecker-package.html</loc></url>
 </urlset>
+

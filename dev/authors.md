@@ -21,13 +21,13 @@ Source:
 [`DESCRIPTION`](https://github.com/r-lib/urlchecker/blob/main/DESCRIPTION)
 
 R Core team, Hester J, Csárdi G (2026). *urlchecker: Run CRAN URL Checks
-from Older R Versions*. R package version 1.0.1.9000,
+from Older R Versions*. R package version 2.0.0.9000,
 <https://github.com/r-lib/urlchecker>.
 
     @Manual{,
       title = {urlchecker: Run CRAN URL Checks from Older R Versions},
       author = {{R Core team} and Jim Hester and Gábor Csárdi},
       year = {2026},
-      note = {R package version 1.0.1.9000},
+      note = {R package version 2.0.0.9000},
       url = {https://github.com/r-lib/urlchecker},
     }

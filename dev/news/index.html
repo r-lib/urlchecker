@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">urlchecker</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">1.0.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">2.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +34,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="urlchecker-development-version">urlchecker (development version)<a class="anchor" aria-label="anchor" href="#urlchecker-development-version"></a></h2>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.0.0" id="urlchecker-200">urlchecker 2.0.0<a class="anchor" aria-label="anchor" href="#urlchecker-200"></a></h2><p class="text-muted">CRAN release: 2026-07-08</p>
 <ul><li><p><code><a href="../reference/url_check.html">url_check()</a></code> now ignores the same HTTP status codes that CRAN ignores in its incoming URL checks: 202, 401, 403, and 429. This makes results match what CRAN reports and avoids false positives from servers that return. Set the <code>_R_CHECK_URLS_HTTP_STATUS_IGNORE_REGEXP_</code> environment variable to override it.</p></li>
 <li><p><code><a href="../reference/url_check.html">url_check()</a></code> now sends the same browser-like <code>User-Agent</code> header that CRAN uses for its URL checks. Set the <code>_R_CHECK_URLS_CURL_USER_AGENT_</code> environment variable to override it (<a href="https://github.com/r-lib/urlchecker/issues/26" class="external-link">#26</a>).</p></li>
 <li><p><code><a href="../reference/url_check.html">url_check()</a></code> no longer reports URLs that appear inside code chunks of <code>.Rmd</code> vignettes (<a href="https://github.com/r-lib/urlchecker/issues/50" class="external-link">#50</a>).</p></li>

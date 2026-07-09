@@ -1,3 +1,5 @@
+# urlchecker (development version)
+
 # urlchecker 2.0.0
 
 * `url_check()` now ignores the same HTTP status codes that CRAN ignores in
